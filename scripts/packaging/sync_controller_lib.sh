@@ -8,15 +8,16 @@ fi
 VERSION=$(cat ${WEBOTS_HOME}/scripts/packaging/webots_version.txt | sed 's/ /-/g')
 
 # Dynamic libraries to be copied
-DYNAMIC_LIBS="Controller CppController car CppCar driver CppDriver"
+DYNAMIC_LIBS="Controller CppController car CppCar driver CppDriver generic_robot_window"
 
 # Don't publish the libcontroller if it hasn't changed since yesterday
 LAST_COMMIT_YESTERDAY=$(git log -1 --pretty=format:"%H" --before=yesterday)
 LAST_COMMIT=$(git log -1 --pretty=format:"%H")
+SYNC_DIFF_SINCE_YESTERDAY=$(git diff ${LAST_COMMIT_YESTERDAY}..${LAST_COMMIT} -- scripts/packaging/sync_controller_lib.sh) # if the bash script itself changed
 INCLUDE_DIFF_SINCE_YESTERDAY=$(git diff ${LAST_COMMIT_YESTERDAY}..${LAST_COMMIT} -- include/controller)
 SOURCE_DIFF_SINCE_YESTERDAY=$(git diff ${LAST_COMMIT_YESTERDAY}..${LAST_COMMIT} -- src/controller)
 VEHICLE_DIFF_SINCE_YESTERDAY=$(git diff ${LAST_COMMIT_YESTERDAY}..${LAST_COMMIT} -- projects/default/librairies/vehicle)
-if [ -z "${INCLUDE_DIFF_SINCE_YESTERDAY}" ] && [ -z "${SOURCE_DIFF_SINCE_YESTERDAY}" ] && [ -z "${VEHICLE_DIFF_SINCE_YESTERDAY}" ]; then
+if [ -z "${SYNC_DIFF_SINCE_YESTERDAY}" ] && [ -z "${INCLUDE_DIFF_SINCE_YESTERDAY}" ] && [ -z "${SOURCE_DIFF_SINCE_YESTERDAY}" ] && [ -z "${VEHICLE_DIFF_SINCE_YESTERDAY}" ]; then
     echo "There are no changes in 'include/controller', 'src/controller' and 'projects/default/librairies/vehicle' since yesterday"
     echo "Last commit yesterday: ${LAST_COMMIT_YESTERDAY}"
     echo "Last commit today: ${LAST_COMMIT}"
@@ -51,7 +52,7 @@ if [ "${OSTYPE}" != "msys" ]; then
     mkdir -p include
     cp -r ${WEBOTS_HOME}/include/controller/* include
     cp ${WEBOTS_HOME}/include/controller/c/webots/plugins/robot_window/{robot_window.h,robot_wwi.h} include
-    
+
     rm -rf source/cpp
     mkdir -p source/cpp/vehicle
     cp ${WEBOTS_HOME}/src/controller/cpp/*.cpp source/cpp
@@ -67,6 +68,13 @@ for filename in $DYNAMIC_LIBS; do
     find ${WEBOTS_HOME}/lib/controller -maxdepth 1 -name "*${filename}*" | xargs -I{} cp {} lib/${OSTYPE}
 done
 
+# Copy libautomobile.so
+FILE=${WEBOTS_HOME}/projects/vehicles/plugins/robot_windows/automobile/libautomobile.so
+if test -f "$FILE"; then
+  echo $FILE
+  cp ${FILE} lib/${OSTYPE}
+fi
+
 # Copy Python libs
 PYTHON_DIRECTORIES=$(find ${WEBOTS_HOME}/lib/controller/python3* -maxdepth 0 -type d)
 for dirname in ${PYTHON_DIRECTORIES}; do
@@ -77,5 +85,5 @@ done
 
 # Push
 git add -A
-git commit -m "Automatic update"
-git push origin ${VERSION}
+#git commit -m "Automatic update"
+#git push origin ${VERSION}
