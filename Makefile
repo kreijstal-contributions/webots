@@ -34,7 +34,7 @@ endif
 WEBOTS_DISTRIBUTION_PATH ?= $(WEBOTS_HOME)/distribution
 
 ifeq ($(MAKECMDGOALS),)
-MAKECMDGOALS = release
+MAKECMDGOALS = debug
 endif
 
 ifeq ($(MAKECMDGOALS),distrib)
