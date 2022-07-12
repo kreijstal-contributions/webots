@@ -249,7 +249,7 @@ class Client:
             port = client.streaming_server_port
             asyncio.set_event_loop(asyncio.new_event_loop())
             if not os.path.exists(world):
-                error = f"error: {self.world} does not exist."
+                error = f"error: {world} does not exist."
                 logging.error(error)
                 client.websocket.write_message(error)
                 return
