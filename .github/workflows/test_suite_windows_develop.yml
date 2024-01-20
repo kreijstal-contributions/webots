@@ -3,6 +3,8 @@ name: Windows build (develop)
 on:
   schedule:
     - cron:  '0 23 * * *'
+  pull_request:
+    branches: [ "develop"]
 
 defaults:
   run:
