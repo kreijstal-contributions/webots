@@ -24,8 +24,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #define STBIW_WINDOWS_UTF8
-#include <stb_image.h>
-#include <stb_image_write.h>
+#include <stb/stb_image.h>
+#include <stb/stb_image_write.h>
 
 #include <webots/types.h>
 

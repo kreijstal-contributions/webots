@@ -55,7 +55,7 @@
 #include <QtGui/QImageReader>
 
 #define STB_IMAGE_IMPLEMENTATION  // needed for include to work properly
-#include <stb_image.h>
+#include <stb/stb_image.h>
 
 QList<WbBackground *> WbBackground::cBackgroundList;
 

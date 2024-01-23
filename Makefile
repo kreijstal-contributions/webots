@@ -16,7 +16,7 @@ START := $(shell date +%s)
 
 ifeq ($(WEBOTS_HOME),)
 ifneq ($(findstring MINGW,$(shell uname)),) # under MINGW, we need to set WEBOTS_HOME using the native Windows format
-export WEBOTS_HOME:=`pwd -W | tr -s / '\\'`
+export WEBOTS_HOME:=$(shell cygpath -w $(PWD))
 else
 export WEBOTS_HOME = $(PWD)
 endif
