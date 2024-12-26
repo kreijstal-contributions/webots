@@ -16,7 +16,14 @@ START := $(shell date +%s)
 
 ifeq ($(WEBOTS_HOME),)
 ifneq ($(findstring MINGW,$(shell uname)),) # under MINGW, we need to set WEBOTS_HOME using the native Windows format
-export WEBOTS_HOME:=`pwd -W | tr -s / '\\'`
+# Check if cygpath exists
+    CYGPATH := $(shell which cygpath)
+    ifneq ($(CYGPATH),)
+        # If cygpath exists, use it to set WEBOTS_HOME
+        export WEBOTS_HOME:=$(shell cygpath -w $(PWD))
+    else
+        export WEBOTS_HOME:=`pwd -W | tr -s / '\\'`
+    endif
 else
 export WEBOTS_HOME = $(PWD)
 endif
@@ -63,7 +70,7 @@ release debug profile: docs webots_projects
 
 distrib: release
 	@+echo "#"; echo "# packaging"; echo "#"
-	@+make --silent -C scripts/packaging
+	@+$(MAKE) --silent -C scripts/packaging
 	$(eval DT := `expr \`date +%s\` - $(START)`)
 	@printf "# distribution compiled in %d:%02d:%02d\n" $$(($(DT) / 3600)) $$(($(DT) % 3600 / 60)) $$(($(DT) % 60))
 
@@ -74,7 +81,7 @@ endif
 # we should make clean before building a release
 clean: webots_projects clean-docs clean-urls
 	@+echo "#"; echo "# * packaging *"; echo "#"
-	@+make --silent -C scripts/packaging clean
+	@+$(MAKE) --silent -C scripts/packaging clean
 	@+echo "#"; echo "# remove OS generated files and text editor backup files"
 	@+find . -type f \( -name "*~" -o -name "*.bak" -o -name ".DS_Store" -o -name ".DS_Store?" -o -name ".Spotlight-V100" -o -name ".Trashes" -o -name "__pycache__" -o -name "Thumbs.db" -o -name "ehthumbs.db" \) -exec /bin/rm -f -- {} + -exec echo "# removed" {} +
 	@+find . -type d \( -name "__pycache__" \) -exec /bin/rm -rf -- {} + -exec echo "# removed" {} +
@@ -92,46 +99,46 @@ ifeq ($(OSTYPE),windows)
 	@rm -rf msys64
 endif
 ifeq ($(OSTYPE),darwin)
-	@+make --silent -C dependencies -f Makefile.mac $(MAKECMDGOALS)
+	@+$(MAKE) --silent -C dependencies -f Makefile.mac $(MAKECMDGOALS)
 endif
 	@+echo "#"; echo "# * tests *"; echo "#"
 	@find tests -name .*.cache | xargs rm -f
-	@+make --silent -C tests clean
+	@+$(MAKE) --silent -C tests clean
 	@+echo "#"; echo "# testing if everything was cleansed..."
 	@+git clean -fdfxn $(CLEAN_IGNORE)
 	@+echo "# done"
 
 webots_target: webots_dependencies
 	@+echo "#"; echo "# * ode *"; echo "#"
-	@+make --silent -C src/ode $(TARGET)
+	@+$(MAKE) -C src/ode $(TARGET)
 ifeq ($(TARGET),profile)  # a shared version of the library is required for physics-plugins
-	@+make --silent -C src/ode release
+	@+$(MAKE) -C src/ode release
 endif
 	@+echo "#"; echo "# * glad *"; echo "#"
-	@+make --silent -C src/glad $(TARGET)
+	@+$(MAKE) -C src/glad $(TARGET)
 	@+echo "#"; echo "# * wren *"; echo "#"
-	@+make --silent -C src/wren $(TARGET)
+	@+$(MAKE) -C src/wren $(TARGET)
 	@+echo "#"; echo "# * webots (core) *"; echo "#"
-	@+make --silent -C src/webots $(TARGET)
+	@+$(MAKE) -C src/webots $(TARGET)
 
 webots_projects: webots_target
 	@+echo "#"; echo "# * controller library *"
-	@+make --silent -C src/controller $(TARGET) WEBOTS_HOME="$(WEBOTS_HOME)"
+	@+$(MAKE) -C src/controller $(TARGET) WEBOTS_HOME="$(WEBOTS_HOME)"
 	@+echo "#"; echo "# * resources *"
-	@+make --silent -C resources $(MAKECMDGOALS) WEBOTS_HOME="$(WEBOTS_HOME)"
+	@+$(MAKE) -C resources $(MAKECMDGOALS) WEBOTS_HOME="$(WEBOTS_HOME)"
 	@+echo "#"; echo "# * projects *"
-	@+make --silent -C projects $(TARGET) WEBOTS_HOME="$(WEBOTS_HOME)"
+	@+$(MAKE) -C projects $(TARGET) WEBOTS_HOME="$(WEBOTS_HOME)"
 
 webots_dependencies:
 	@+echo "#"; echo "# * dependencies *"; echo "#"
 ifeq ($(OSTYPE),darwin)
-	@+make --silent -C dependencies -f Makefile.mac $(MAKECMDGOALS)
+	@+$(MAKE) -C dependencies -f Makefile.mac $(MAKECMDGOALS)
 endif
 ifeq ($(OSTYPE),linux)
-	@+make --silent -C dependencies -f Makefile.linux $(MAKECMDGOALS)
+	@+$(MAKE) -C dependencies -f Makefile.linux $(MAKECMDGOALS)
 endif
 ifeq ($(OSTYPE),windows)
-	@+make --silent -C dependencies -f Makefile.windows $(MAKECMDGOALS)
+	#@+remake -C dependencies -f Makefile.windows $(MAKECMDGOALS)
 endif
 ifneq ($(TARGET),clean)
 	@+python3 scripts/packaging/generate_proto_list.py
@@ -160,7 +167,7 @@ clean-urls:
 
 install:
 	@+echo "#"; echo "# * installing (snap) *"
-	@+make --silent -C scripts/packaging -f Makefile install
+	@+$(MAKE) --silent -C scripts/packaging -f Makefile install
 
 help:
 	@+echo

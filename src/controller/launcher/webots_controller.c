@@ -409,13 +409,13 @@ The function also adds the controller library directory to the Path on all platf
 */
 static void exec_java_config_environment() {
 #ifdef _WIN32
-  const size_t new_windows_path_size = snprintf(NULL, 0, "Path=%s\\msys64\\mingw64\\bin;%s\\msys64\\mingw64\\bin\\cpp;%s",
-                                                WEBOTS_HOME, WEBOTS_HOME, getenv("Path")) +
-                                       1;
-  new_windows_path = malloc(new_windows_path_size);
-  sprintf(new_windows_path, "Path=%s\\msys64\\mingw64\\bin;%s\\msys64\\mingw64\\bin\\cpp;%s", WEBOTS_HOME, WEBOTS_HOME,
-          getenv("Path"));
-  putenv(new_windows_path);
+  //const size_t new_windows_path_size = snprintf(NULL, 0, "Path=%s\\msys64\\mingw64\\bin;%s\\msys64\\mingw64\\bin\\cpp;%s",
+  //                                              WEBOTS_HOME, WEBOTS_HOME, getenv("Path")) +
+  //                                     1;
+  //new_windows_path = malloc(new_windows_path_size);
+  //sprintf(new_windows_path, "Path=%s\\msys64\\mingw64\\bin;%s\\msys64\\mingw64\\bin\\cpp;%s", WEBOTS_HOME, WEBOTS_HOME,
+  //        getenv("Path"));
+  //putenv(new_windows_path);
 #endif
   add_lib_controller_to_path();
 }
@@ -447,10 +447,10 @@ static void python_config_environment() {
 // On Windows add libCppController to Path (useful for C++ controllers, robot windows and remote control plugins)
 // On macOS add libController to DYLD_LIBRARY_PATH (useful for generic robot window library)
 #ifdef _WIN32
-  const size_t new_path_size = snprintf(NULL, 0, "Path=%s\\msys64\\mingw64\\bin\\cpp;%s", WEBOTS_HOME, getenv("Path")) + 1;
-  new_path = malloc(new_path_size);
-  sprintf(new_path, "Path=%s\\msys64\\mingw64\\bin\\cpp;%s", WEBOTS_HOME, getenv("Path"));
-  putenv(new_path);
+  //const size_t new_path_size = snprintf(NULL, 0, "Path=%s\\msys64\\mingw64\\bin\\cpp;%s", WEBOTS_HOME, getenv("Path")) + 1;
+  //new_path = malloc(new_path_size);
+  //sprintf(new_path, "Path=%s\\msys64\\mingw64\\bin\\cpp;%s", WEBOTS_HOME, getenv("Path"));
+  //putenv(new_path);
 #elif defined __APPLE__
   const size_t new_path_size =
     snprintf(NULL, 0, "DYLD_LIBRARY_PATH=%s/Contents/lib/controller:%s", WEBOTS_HOME, getenv("DYLD_LIBRARY_PATH")) + 1;

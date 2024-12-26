@@ -94,7 +94,7 @@ STATIC_LIB_EXTENSION = .a
 ifeq ($(OSTYPE),windows)
  EXE_EXTENSION = .exe
  SHARED_LIB_EXTENSION = .dll
- WEBOTS_LIB_PATH=$(subst \,/,$(WEBOTS_HOME))/msys64/mingw64/bin
+ WEBOTS_LIB_PATH=$(subst \,/,$(WEBOTS_HOME))/bin
  WEBOTS_CONTROLLER_LIB_PATH=$(subst \,/,$(WEBOTS_HOME))/lib/controller
 else
  LIB_PREFIX = lib
