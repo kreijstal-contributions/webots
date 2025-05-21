@@ -23,8 +23,8 @@
 
 #include "types.h"
 
-void   wb_position_sensor_enable(WbDeviceTag dt, int sampling_period);
-void   wb_position_sensor_disable(WbDeviceTag dt);
+void wb_position_sensor_enable(WbDeviceTag dt, int sampling_period);
+void wb_position_sensor_disable(WbDeviceTag dt);
 double wb_position_sensor_get_value(WbDeviceTag dt);
 
 #endif /* POSITION_SENSOR_H */

@@ -24,12 +24,12 @@
 #include "printf_override.h"
 #include "types.h"
 
-int          wb_robot_init();
-int          wb_robot_step(int duration); /* duration in milliseconds */
-void         wb_robot_cleanup();
-double       wb_robot_get_time();
-WbDeviceTag  wb_robot_get_device(const char *name);
-#define      wb_robot_get_name() "e-puck"
-#define      wb_robot_get_mode() 1
+int wb_robot_init();
+int wb_robot_step(int duration); /* duration in milliseconds */
+void wb_robot_cleanup();
+double wb_robot_get_time();
+WbDeviceTag wb_robot_get_device(const char *name);
+#define wb_robot_get_name() "e-puck"
+#define wb_robot_get_mode() 1
 
 #endif /* ROBOT_H */

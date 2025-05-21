@@ -1,7 +1,7 @@
 /*
  * ColorFinder.h
  * this class provides features to find a color in an image
- 
+
  *  Created on: 2011. 1. 10.
  *      Author: zerom
  */
@@ -11,70 +11,61 @@
 
 #include <string>
 
-#include "Point.h"
 #include "Image.h"
+#include "Point.h"
 #include "minIni.h"
 
-#define COLOR_SECTION   "Find Color"
-#define INVALID_VALUE   -1024.0
+#define COLOR_SECTION "Find Color"
+#define INVALID_VALUE -1024.0
 
-namespace Robot
-{
+namespace Robot {
 
+  class ColorFinder {
+  private:
+    Point2D m_center_point;
 
+    void Filtering(Image *img);
 
-    class ColorFinder
-    {
-    private:
-        Point2D m_center_point;
+  public:
+    int m_hue;            /* 0 ~ 360 */
+    int m_hue_tolerance;  /* 0 ~ 180 */
+    int m_min_saturation; /* 0 ~ 100 */
+    int m_max_saturation; /* 0 ~ 100 */
+    int m_min_value;      /* 0 ~ 100 */
+    int m_max_value;      /* 0 ~ 100 */
+    double m_min_percent; /* 0.0 ~ 100.0 */
+    double m_max_percent; /* 0.0 ~ 100.0 */
 
-        void Filtering(Image* img);
+    std::string color_section; /*TODO: ?*/
 
-    public:
-        int m_hue;             /* 0 ~ 360 */
-        int m_hue_tolerance;   /* 0 ~ 180 */
-        int m_min_saturation;  /* 0 ~ 100 */
-        int m_max_saturation;  /* 0 ~ 100 */
-        int m_min_value;       /* 0 ~ 100 */
-        int m_max_value;       /* 0 ~ 100 */
-        double m_min_percent;  /* 0.0 ~ 100.0 */
-        double m_max_percent;  /* 0.0 ~ 100.0 */
+    Image *m_result;
 
-        std::string color_section; /*TODO: ?*/
+    /*TODO: not clear what it creates*/
+    ColorFinder();
 
-        Image*  m_result;
+    /*
+    Create an object to detect a color in an image
+    The color is given according to the HSV model (hue, saturation and value)
+    */
+    ColorFinder(int hue, int hue_tol, int min_sat, int min_val, double min_per, double max_per);
+    ColorFinder(int hue, int hue_tol, int min_sat, int max_sat, int min_val, int max_val, double min_per, double max_per);
 
-		
-		
-		/*TODO: not clear what it creates*/
-        ColorFinder();
+    virtual ~ColorFinder();
 
-		/*
-		Create an object to detect a color in an image
-		The color is given according to the HSV model (hue, saturation and value)
-		*/
-        ColorFinder(int hue, int hue_tol, int min_sat, int min_val, double min_per, double max_per);
-        ColorFinder(int hue, int hue_tol, int min_sat, int max_sat, int min_val, int max_val, double min_per, double max_per);
+    /*load from INI file*/
 
-        virtual ~ColorFinder();
+    void LoadINISettings(minIni *ini);
+    void LoadINISettings(minIni *ini, const std::string &section);
+    void SaveINISettings(minIni *ini);
+    void SaveINISettings(minIni *ini, const std::string &section);
 
-		
-		
-/*load from INI file*/		
-		
-        void LoadINISettings(minIni* ini);
-        void LoadINISettings(minIni* ini, const std::string &section);
-        void SaveINISettings(minIni* ini);
-        void SaveINISettings(minIni* ini, const std::string &section);
-
-        
-		/*
-		input: an image hsv_img
-		output: the average point where the color is found, or (-1, -1) if the color is not found 
-		effects: modify m_result via Filtering
-		*/
-		Point2D& GetPosition(Image* hsv_img);
-    };
-}
+    /*
+    input: an image hsv_img
+    output: the average point where the color is found, or (-1, -1) if the color is not found
+    effects: modify m_result via Filtering
+    */
+    Point2D &GetPosition(Image *hsv_img);
+  };
+}  // namespace Robot
 
 #endif /* COLORFINDER_H_ */

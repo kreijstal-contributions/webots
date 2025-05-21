@@ -8,86 +8,74 @@
 #ifndef _LINUX_CAMERA_H_
 #define _LINUX_CAMERA_H_
 
-#include <stdlib.h>
 #include <linux/videodev2.h>
+#include <stdlib.h>
 #include <sys/time.h>
 
 #include "Image.h"
 #include "minIni.h"
 
-namespace Robot
-{
-    class CameraSettings
-    {
-    private:
+namespace Robot {
+  class CameraSettings {
+  private:
+  protected:
+  public:
+    int brightness; /* 0 ~ 255 */
+    int contrast;   /* 0 ~ 255 */
+    int saturation; /* 0 ~ 255 */
+    int gain;       /* 0 ~ 255 */
+    int exposure;   /* 0 ~ 10000 */
 
-    protected:
+    CameraSettings() : brightness(-1), contrast(-1), saturation(-1), gain(255), exposure(1000) {}
+  };
 
-    public:
-        int brightness; /* 0 ~ 255 */
-        int contrast;   /* 0 ~ 255 */
-        int saturation; /* 0 ~ 255 */
-        int gain;       /* 0 ~ 255 */
-        int exposure;   /* 0 ~ 10000 */
+  class LinuxCamera {
+  private:
+    static LinuxCamera *uniqueInstance;
 
-        CameraSettings() :
-            brightness(-1),
-            contrast(-1),
-            saturation(-1),
-            gain(255),
-            exposure(1000)
-        {}
+    CameraSettings settings;
+
+    int camera_fd;
+    struct buffer {
+      void *start;
+      size_t length;
     };
+    struct buffer *buffers;
+    unsigned int n_buffers;
 
-	class LinuxCamera
-	{
-	private:
-        static LinuxCamera* uniqueInstance;
+    LinuxCamera();
 
-        CameraSettings settings;
+    void ErrorExit(const char *s);
+    int ReadFrame();
+    int ReadFrameWb();  // for Webots only
 
-	    int camera_fd;
-	    struct buffer {
-	        void * start;
-	        size_t length;
-	    };
-	    struct buffer * buffers;
-	    unsigned int n_buffers;
+  protected:
+  public:
+    bool DEBUG_PRINT;
+    FrameBuffer *fbuffer;
 
-        LinuxCamera();
+    ~LinuxCamera();
 
-        void ErrorExit(const char* s);
-	    int ReadFrame();
-	    int ReadFrameWb();  // for Webots only
+    static LinuxCamera *GetInstance() { return uniqueInstance; }
 
-	protected:
+    int Initialize(int deviceIndex);
 
-	public:
-		bool DEBUG_PRINT;
-        FrameBuffer* fbuffer;
+    int v4l2GetControl(int control);
+    int v4l2SetControl(int control, int value);
+    int v4l2ResetControl(int control);
 
-		~LinuxCamera();
+    void LoadINISettings(minIni *ini);
+    void SaveINISettings(minIni *ini);
 
-        static LinuxCamera* GetInstance() { return uniqueInstance; }
+    void SetCameraSettings(const CameraSettings &newset);
+    const CameraSettings &GetCameraSettings();
 
-        int Initialize(int deviceIndex);
+    void SetAutoWhiteBalance(int isAuto) { v4l2SetControl(V4L2_CID_AUTO_WHITE_BALANCE, isAuto); }
+    unsigned char GetAutoWhiteBalance() { return (unsigned char)(v4l2GetControl(V4L2_CID_AUTO_WHITE_BALANCE)); }
 
-	    int v4l2GetControl(int control);
-	    int v4l2SetControl(int control, int value);
-	    int v4l2ResetControl(int control);
-
-	    void LoadINISettings(minIni* ini);
-	    void SaveINISettings(minIni* ini);
-
-	    void SetCameraSettings(const CameraSettings& newset);
-	    const CameraSettings& GetCameraSettings();
-
-	    void SetAutoWhiteBalance(int isAuto) { v4l2SetControl(V4L2_CID_AUTO_WHITE_BALANCE, isAuto); }
-	    unsigned char GetAutoWhiteBalance() { return (unsigned char)(v4l2GetControl(V4L2_CID_AUTO_WHITE_BALANCE)); }
-
-	    void CaptureFrame();
-	    void CaptureFrameWb(); // for Webots only
-	};
-}
+    void CaptureFrame();
+    void CaptureFrameWb();  // for Webots only
+  };
+}  // namespace Robot
 
 #endif

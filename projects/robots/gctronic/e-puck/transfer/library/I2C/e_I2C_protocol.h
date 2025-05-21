@@ -1,7 +1,7 @@
 /********************************************************************************
 
-			I2C master module
-			Version 1.0 may 2005 Davis Daidie
+                        I2C master module
+                        Version 1.0 may 2005 Davis Daidie
 
 
 This file is part of the e-puck library license.
@@ -30,11 +30,10 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
 #ifndef _I2C_PROTOCOL
 #define _I2C_PROTOCOL
 
-#include "e_I2C_master_module.h"
 #include "../motor_led/e_epuck_ports.h"
+#include "e_I2C_master_module.h"
 
-
-//public interface
+// public interface
 
 // use void e_i2cp_init(void); in your initialisation. no interrupt is enable
 // use void e_i2cp_enable(void); before any other operation to enable the interrupts
@@ -42,10 +41,10 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
 
 void e_i2cp_init(void);
 void e_i2cp_deinit(void);
-char e_i2cp_write (char device_add,char reg, char value);
-char e_i2cp_read(char device_add,char reg);
+char e_i2cp_write(char device_add, char reg, char value);
+char e_i2cp_read(char device_add, char reg);
 char e_i2cp_read_string(char device_add, unsigned char read_buffer[], char start_address, char string_length);
-char e_i2cp_write_string (char device_add, unsigned char write_buffer[], char start_address, char string_length);
+char e_i2cp_write_string(char device_add, unsigned char write_buffer[], char start_address, char string_length);
 void e_i2cp_enable(void);
 void e_i2cp_disable(void);
 

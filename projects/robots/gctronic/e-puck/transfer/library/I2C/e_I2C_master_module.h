@@ -1,7 +1,7 @@
 /********************************************************************************
 
-			I2C master module
-			Version 1.0 may 2005 Davis Daidie
+                        I2C master module
+                        Version 1.0 may 2005 Davis Daidie
 
 
 This file is part of the e-puck library license.
@@ -164,15 +164,14 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
 
 #include "p30F6014A.h"
 
-
-#define START			1
-#define WRITE			2
-#define ACKNOWLEDGE		3
-#define READ			4
-#define STOP			5
-#define RESTART			6
-#define ERROR			10
-#define OPERATION_OK	0
+#define START 1
+#define WRITE 2
+#define ACKNOWLEDGE 3
+#define READ 4
+#define STOP 5
+#define RESTART 6
+#define ERROR 10
+#define OPERATION_OK 0
 
 // -use I2C_init() in your initialisation
 // -I2C_enable(void) before anythig else to enable interrupts
@@ -194,6 +193,5 @@ char e_i2c_write(char byte);
 char e_i2c_enable(void);
 char e_i2c_disable(void);
 char e_i2c_reset(void);
-
 
 #endif

@@ -1,8 +1,8 @@
 /********************************************************************************
 
-			control IR receiver module
-			september 2005 : first version
-			Valentin Longchamp
+                        control IR receiver module
+                        september 2005 : first version
+                        Valentin Longchamp
 
 
 This file is part of the e-puck library license.
@@ -44,11 +44,11 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
  */
 
 /********************************************************************
-* 			control IR receiver module								*
-*			september 2005 : first version							*
-*			Valentin Longchamp										*
-*																	*
-********************************************************************/
+ * 			control IR receiver module								*
+ *			september 2005 : first version							*
+ *			Valentin Longchamp										*
+ *																	*
+ ********************************************************************/
 
 /*! \file
  * \ingroup motor_LED
@@ -90,18 +90,16 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
 
 /* defines for the keys on the remote controler
  * the numbers 0 to 9 are not defined since they are the same */
-#define BOTTOMR		10 	// -/-- key
-#define BOTTOMl		11 	// p<p key
-#define	STANDBY		12
-#define MUTE		13
-#define VOL_UP		16
-#define VOL_DOWN	17
-#define CHAN_UP		32
-#define CHAN_DOWN	33
-#define I_II		35
-#define OUT_AUX_1	56
-
-
+#define BOTTOMR 10  // -/-- key
+#define BOTTOMl 11  // p<p key
+#define STANDBY 12
+#define MUTE 13
+#define VOL_UP 16
+#define VOL_DOWN 17
+#define CHAN_UP 32
+#define CHAN_DOWN 33
+#define I_II 35
+#define OUT_AUX_1 56
 
 /* functions */
 void e_init_remote_control(void);

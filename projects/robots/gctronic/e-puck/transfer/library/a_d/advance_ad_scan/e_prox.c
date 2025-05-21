@@ -1,7 +1,7 @@
 /********************************************************************************
 
-			Accessing the proximity sensor data (advance)
-			Novembre 7 2005	Lucas Meier
+                        Accessing the proximity sensor data (advance)
+                        Novembre 7 2005	Lucas Meier
 
 
 This file is part of the e-puck library license.
@@ -54,39 +54,39 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
  * \author Code: Lucas Meier \n Doc: Jonathan Besuchet
  */
 
-#include "e_ad_conv.h"
-#include "../../motor_led/e_epuck_ports.h"
 #include "e_prox.h"
+#include "../../motor_led/e_epuck_ports.h"
+#include "e_ad_conv.h"
 
-extern int e_ambient_ir[10];						// ambient light measurement
-extern int e_ambient_and_reflected_ir[10];		// light when led is on
+extern int e_ambient_ir[10];                // ambient light measurement
+extern int e_ambient_and_reflected_ir[10];  // light when led is on
 
-static int init_value_ir[10] = {0,0,0,0,0,0,0,0,0,0};
+static int init_value_ir[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 /*! \brief To calibrate your ir sensor
  * \warning Call this function one time before calling e_get_calibrated_prox
  */
-void e_calibrate_ir()
-{
-	int i=0,j=0;
-	int long t;
-	int long tmp[10];
+void e_calibrate_ir() {
+  int i = 0, j = 0;
+  int long t;
+  int long tmp[10];
 
-	for (;i<10;++i) {
-		init_value_ir[i]=0;
-		tmp[i]=0;
-	}
+  for (; i < 10; ++i) {
+    init_value_ir[i] = 0;
+    tmp[i] = 0;
+  }
 
-	for (;j<100;++j) {
-		for (i=0;i<10;++i) {
-			tmp[i]+=(e_get_prox(i));
-			for (t=0;t<1000;++t);
-		}
-	}
+  for (; j < 100; ++j) {
+    for (i = 0; i < 10; ++i) {
+      tmp[i] += (e_get_prox(i));
+      for (t = 0; t < 1000; ++t)
+        ;
+    }
+  }
 
-	for (i=0;i<10;++i) {
-		init_value_ir[i]=(int)(tmp[i]/(j*1.0));
-	}
+  for (i = 0; i < 10; ++i) {
+    init_value_ir[i] = (int)(tmp[i] / (j * 1.0));
+  }
 }
 
 /*! \brief To get the analogic proxy sensor value of a specific ir sensor
@@ -104,12 +104,11 @@ void e_calibrate_ir()
  *                      Must be between 0 to 7.
  * \return The analogic value of the specified proxy sensor
  */
-int e_get_prox(unsigned int sensor_number)
-{
-	if (sensor_number > 9)
-		return 0;
-	else
-		return e_ambient_ir[sensor_number] - e_ambient_and_reflected_ir[sensor_number];
+int e_get_prox(unsigned int sensor_number) {
+  if (sensor_number > 9)
+    return 0;
+  else
+    return e_ambient_ir[sensor_number] - e_ambient_and_reflected_ir[sensor_number];
 }
 
 /*! \brief To get the calibrated value of the ir sensor
@@ -121,20 +120,17 @@ int e_get_prox(unsigned int sensor_number)
  *                      Must be between 0 to 7.
  * \return The analogic value of the specified proxy sensor
  */
-int e_get_calibrated_prox(unsigned int sensor_number)
-{
-	int temp;
-	if (sensor_number > 9)
-		return 0;
-	else
-	{
-		temp=(e_ambient_ir[sensor_number] - e_ambient_and_reflected_ir[sensor_number])
-				- init_value_ir[sensor_number];
-		if (temp>0)
-			return temp;
-		else
-			return 0;
-	}
+int e_get_calibrated_prox(unsigned int sensor_number) {
+  int temp;
+  if (sensor_number > 9)
+    return 0;
+  else {
+    temp = (e_ambient_ir[sensor_number] - e_ambient_and_reflected_ir[sensor_number]) - init_value_ir[sensor_number];
+    if (temp > 0)
+      return temp;
+    else
+      return 0;
+  }
 }
 
 /*! \brief To get the analogic ambient light value of a specific ir sensor
@@ -144,10 +140,9 @@ int e_get_calibrated_prox(unsigned int sensor_number)
  *                      Must be between 0 to 7.
  * \return The analogic value of the specified proxy sensor
  */
-int e_get_ambient_light(unsigned int sensor_number)
-{
-	if (sensor_number > 9)
-		return 0;
-	else
-		return e_ambient_ir[sensor_number];
+int e_get_ambient_light(unsigned int sensor_number) {
+  if (sensor_number > 9)
+    return 0;
+  else
+    return e_ambient_ir[sensor_number];
 }

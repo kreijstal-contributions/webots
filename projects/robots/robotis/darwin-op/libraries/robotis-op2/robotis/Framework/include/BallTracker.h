@@ -13,22 +13,20 @@
 #include "Point.h"
 #include "minIni.h"
 
-namespace Robot
-{
-	class BallTracker
-	{
-	private:
-		int NoBallCount;
-		static const int NoBallMaxCount = 15;
+namespace Robot {
+  class BallTracker {
+  private:
+    int NoBallCount;
+    static const int NoBallMaxCount = 15;
 
-	public:
-        Point2D     ball_position;
+  public:
+    Point2D ball_position;
 
-		BallTracker();
-		~BallTracker();
+    BallTracker();
+    ~BallTracker();
 
-		void Process(Point2D pos);
-	};
-}
+    void Process(Point2D pos);
+  };
+}  // namespace Robot
 
 #endif

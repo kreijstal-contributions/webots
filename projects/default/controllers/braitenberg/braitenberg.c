@@ -55,7 +55,7 @@ static void initialize() {
   const char pioneer2_name[] = "ds0";
 
   char sensors_name[5];
-  const double(*temp_matrix)[2];
+  const double (*temp_matrix)[2];
 
   camera_enabled = 0;
   range = RANGE;

@@ -20,32 +20,32 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA    #
 #                                                                              #
 *******************************************************************************/
+#include <arpa/inet.h>
+#include <fcntl.h>
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <pthread.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #include <syslog.h>
+#include <unistd.h>
 
 #include "LinuxCamera.h"
 #include "Walking.h"
 #include "httpd.h"
 
-context* httpd::server;
-globals* httpd::pglobal;
+context *httpd::server;
+globals *httpd::pglobal;
 
-ColorFinder* httpd::finder;
-ColorFinder* httpd::ball_finder;
-ColorFinder* httpd::red_finder;
-ColorFinder* httpd::yellow_finder;
-ColorFinder* httpd::blue_finder;
-minIni*      httpd::ini;
+ColorFinder *httpd::finder;
+ColorFinder *httpd::ball_finder;
+ColorFinder *httpd::red_finder;
+ColorFinder *httpd::yellow_finder;
+ColorFinder *httpd::blue_finder;
+minIni *httpd::ini;
 bool httpd::ClientRequest(false);
 
 /******************************************************************************
@@ -64,9 +64,9 @@ Input Value.: pointer to already allocated req
 Return Value: req
 ******************************************************************************/
 void httpd::init_request(request *req) {
-  req->type        = A_UNKNOWN;
-  req->parameter   = NULL;
-  req->client      = NULL;
+  req->type = A_UNKNOWN;
+  req->parameter = NULL;
+  req->client = NULL;
   req->credentials = NULL;
 }
 
@@ -77,9 +77,12 @@ Input Value.: req: pointer to request structure
 Return Value: -
 ******************************************************************************/
 void httpd::free_request(request *req) {
-  if ( req->parameter != NULL ) free(req->parameter);
-  if ( req->client != NULL ) free(req->client);
-  if ( req->credentials != NULL ) free(req->credentials);
+  if (req->parameter != NULL)
+    free(req->parameter);
+  if (req->client != NULL)
+    free(req->client);
+  if (req->credentials != NULL)
+    free(req->credentials);
 }
 
 /******************************************************************************
@@ -99,19 +102,19 @@ Return Value: * buffer.: will become filled with bytes read
               * func().: bytes copied to buffer or -1 in case of error
 ******************************************************************************/
 int httpd::_read(int fd, iobuffer *iobuf, void *buffer, size_t len, int timeout) {
-  int copied=0, rc, i;
+  int copied = 0, rc, i;
   fd_set fds;
   struct timeval tv;
 
   memset(buffer, 0, len);
 
-  while ( (copied < (int)len) ) {
-    i = MIN(iobuf->level, (int)len-copied);
-    memcpy(buffer+copied, iobuf->buffer+IO_BUFFER-iobuf->level, i);
+  while ((copied < (int)len)) {
+    i = MIN(iobuf->level, (int)len - copied);
+    memcpy(buffer + copied, iobuf->buffer + IO_BUFFER - iobuf->level, i);
 
     iobuf->level -= i;
     copied += i;
-    if ( copied >= len )
+    if (copied >= len)
       return copied;
 
     /* select will return in case of timeout or new data arrived */
@@ -119,8 +122,8 @@ int httpd::_read(int fd, iobuffer *iobuf, void *buffer, size_t len, int timeout)
     tv.tv_usec = 0;
     FD_ZERO(&fds);
     FD_SET(fd, &fds);
-    if ( (rc = select(fd+1, &fds, NULL, NULL, &tv)) <= 0 ) {
-      if ( rc < 0)
+    if ((rc = select(fd + 1, &fds, NULL, NULL, &tv)) <= 0) {
+      if (rc < 0)
         exit(EXIT_FAILURE);
 
       /* this must be a timeout */
@@ -135,13 +138,13 @@ int httpd::_read(int fd, iobuffer *iobuf, void *buffer, size_t len, int timeout)
      * the select() and the following read. That is the reason for not relying
      * on reading at least one byte.
      */
-    if ( (iobuf->level = read(fd, &iobuf->buffer, IO_BUFFER)) <= 0 ) {
+    if ((iobuf->level = read(fd, &iobuf->buffer, IO_BUFFER)) <= 0) {
       /* an error occured */
       return -1;
     }
 
     /* align data to the end of the buffer if less than IO_BUFFER bytes were read */
-    memmove(iobuf->buffer+(IO_BUFFER-iobuf->level), iobuf->buffer, iobuf->level);
+    memmove(iobuf->buffer + (IO_BUFFER - iobuf->level), iobuf->buffer, iobuf->level);
   }
 
   return 0;
@@ -165,13 +168,13 @@ Return Value: * buffer.: will become filled with bytes read
 ******************************************************************************/
 /* read just a single line or timeout */
 int httpd::_readline(int fd, iobuffer *iobuf, void *buffer, size_t len, int timeout) {
-  char c='\0', *out=(char*)buffer;
+  char c = '\0', *out = (char *)buffer;
   int i;
 
   memset(buffer, 0, len);
 
-  for ( i=0; i<len && c != '\n'; i++ ) {
-    if ( _read(fd, iobuf, &c, 1, timeout) <= 0 ) {
+  for (i = 0; i < len && c != '\n'; i++) {
+    if (_read(fd, iobuf, &c, 1, timeout) <= 0) {
       /* timeout or error occured */
       return -1;
     }
@@ -216,9 +219,9 @@ void httpd::decodeBase64(char *data) {
     ch = (ch << 6) | t;
     i++;
     if (i == 4) {
-      *data++ = (char) (ch >> 16);
-      *data++ = (char) (ch >> 8);
-      *data++ = (char) ch;
+      *data++ = (char)(ch >> 16);
+      *data++ = (char)(ch >> 8);
+      *data++ = (char)ch;
       i = 0;
     }
   }
@@ -231,8 +234,8 @@ Input Value.: fildescriptor fd to send the answer to
 Return Value: -
 ******************************************************************************/
 void httpd::send_snapshot(int fd) {
-  unsigned char *frame=NULL;
-  int frame_size=0;
+  unsigned char *frame = NULL;
+  int frame_size = 0;
   char buffer[BUFFER_SIZE] = {0};
 
   /* wait for a fresh frame */
@@ -242,26 +245,24 @@ void httpd::send_snapshot(int fd) {
   frame_size = pglobal->size;
 
   /* allocate a buffer for this single frame */
-  if ( (frame = (unsigned char*)malloc(frame_size+1)) == NULL ) {
+  if ((frame = (unsigned char *)malloc(frame_size + 1)) == NULL) {
     free(frame);
-    pthread_mutex_unlock( &pglobal->db );
+    pthread_mutex_unlock(&pglobal->db);
     send_error(fd, 500, "not enough memory");
     return;
   }
 
   memcpy(frame, pglobal->buf, frame_size);
-  DBG("got frame (size: %d kB)\n", frame_size/1024);
+  DBG("got frame (size: %d kB)\n", frame_size / 1024);
 
-  pthread_mutex_unlock( &pglobal->db );
+  pthread_mutex_unlock(&pglobal->db);
 
   /* write the response */
-  sprintf(buffer, "HTTP/1.0 200 OK\r\n" \
-                  STD_HEADER \
-                  "Content-type: image/jpeg\r\n" \
+  sprintf(buffer, "HTTP/1.0 200 OK\r\n" STD_HEADER "Content-type: image/jpeg\r\n"
                   "\r\n");
 
   /* send header and image now */
-  if( write(fd, buffer, strlen(buffer)) < 0 ) {
+  if (write(fd, buffer, strlen(buffer)) < 0) {
     free(frame);
     return;
   }
@@ -276,27 +277,24 @@ Input Value.: fildescriptor fd to send the answer to
 Return Value: -
 ******************************************************************************/
 void httpd::send_stream(int fd) {
-  unsigned char *frame=NULL, *tmp=NULL;
-  int frame_size=0, max_frame_size=0;
+  unsigned char *frame = NULL, *tmp = NULL;
+  int frame_size = 0, max_frame_size = 0;
   char buffer[BUFFER_SIZE] = {0};
 
   DBG("preparing header\n");
 
-  sprintf(buffer, "HTTP/1.0 200 OK\r\n" \
-                  STD_HEADER \
-                  "Content-Type: multipart/x-mixed-replace;boundary=" BOUNDARY "\r\n" \
-                  "\r\n" \
+  sprintf(buffer, "HTTP/1.0 200 OK\r\n" STD_HEADER "Content-Type: multipart/x-mixed-replace;boundary=" BOUNDARY "\r\n"
+                  "\r\n"
                   "--" BOUNDARY "\r\n");
 
-  if ( write(fd, buffer, strlen(buffer)) < 0 ) {
+  if (write(fd, buffer, strlen(buffer)) < 0) {
     free(frame);
     return;
   }
 
   DBG("Headers send, sending stream now\n");
 
-  while ( 1 /*!pglobal->stop*/ ) {
-
+  while (1 /*!pglobal->stop*/) {
     /* wait for fresh frames */
     pthread_cond_wait(&pglobal->db_update, &pglobal->db);
 
@@ -304,13 +302,13 @@ void httpd::send_stream(int fd) {
     frame_size = pglobal->size;
 
     /* check if framebuffer is large enough, increase it if necessary */
-    if ( frame_size > max_frame_size ) {
+    if (frame_size > max_frame_size) {
       DBG("increasing buffer size to %d\n", frame_size);
 
-      max_frame_size = frame_size+TEN_K;
-      if ( (tmp = (unsigned char*)realloc(frame, max_frame_size)) == NULL ) {
+      max_frame_size = frame_size + TEN_K;
+      if ((tmp = (unsigned char *)realloc(frame, max_frame_size)) == NULL) {
         free(frame);
-        pthread_mutex_unlock( &pglobal->db );
+        pthread_mutex_unlock(&pglobal->db);
         send_error(fd, 500, "not enough memory");
         return;
       }
@@ -319,27 +317,32 @@ void httpd::send_stream(int fd) {
     }
 
     memcpy(frame, pglobal->buf, frame_size);
-    DBG("got frame (size: %d kB)\n", frame_size/1024);
+    DBG("got frame (size: %d kB)\n", frame_size / 1024);
 
-    pthread_mutex_unlock( &pglobal->db );
+    pthread_mutex_unlock(&pglobal->db);
 
     /*
      * print the individual mimetype and the length
      * sending the content-length fixes random stream disruption observed
      * with firefox
      */
-    sprintf(buffer, "Content-Type: image/jpeg\r\n" \
-                    "Content-Length: %d\r\n" \
-                    "\r\n", frame_size);
+    sprintf(buffer,
+            "Content-Type: image/jpeg\r\n"
+            "Content-Length: %d\r\n"
+            "\r\n",
+            frame_size);
     DBG("sending intemdiate header\n");
-    if ( write(fd, buffer, strlen(buffer)) < 0 ) break;
+    if (write(fd, buffer, strlen(buffer)) < 0)
+      break;
 
     DBG("sending frame\n");
-    if( write(fd, frame, frame_size) < 0 ) break;
+    if (write(fd, frame, frame_size) < 0)
+      break;
 
     DBG("sending boundary\n");
     sprintf(buffer, "\r\n--" BOUNDARY "\r\n");
-    if ( write(fd, buffer, strlen(buffer)) < 0 ) break;
+    if (write(fd, buffer, strlen(buffer)) < 0)
+      break;
   }
 
   free(frame);
@@ -355,42 +358,42 @@ Return Value: -
 void httpd::send_error(int fd, int which, char *message) {
   char buffer[BUFFER_SIZE] = {0};
 
-  if ( which == 401 ) {
-    sprintf(buffer, "HTTP/1.0 401 Unauthorized\r\n" \
-                    "Content-type: text/plain\r\n" \
-                    STD_HEADER \
-                    "WWW-Authenticate: Basic realm=\"MJPG-Streamer\"\r\n" \
-                    "\r\n" \
-                    "401: Not Authenticated!\r\n" \
-                    "%s", message);
-  } else if ( which == 404 ) {
-    sprintf(buffer, "HTTP/1.0 404 Not Found\r\n" \
-                    "Content-type: text/plain\r\n" \
-                    STD_HEADER \
-                    "\r\n" \
-                    "404: Not Found!\r\n" \
-                    "%s", message);
-  } else if ( which == 500 ) {
-    sprintf(buffer, "HTTP/1.0 500 Internal Server Error\r\n" \
-                    "Content-type: text/plain\r\n" \
-                    STD_HEADER \
-                    "\r\n" \
-                    "500: Internal Server Error!\r\n" \
-                    "%s", message);
-  } else if ( which == 400 ) {
-    sprintf(buffer, "HTTP/1.0 400 Bad Request\r\n" \
-                    "Content-type: text/plain\r\n" \
-                    STD_HEADER \
-                    "\r\n" \
-                    "400: Not Found!\r\n" \
-                    "%s", message);
+  if (which == 401) {
+    sprintf(buffer,
+            "HTTP/1.0 401 Unauthorized\r\n"
+            "Content-type: text/plain\r\n" STD_HEADER "WWW-Authenticate: Basic realm=\"MJPG-Streamer\"\r\n"
+            "\r\n"
+            "401: Not Authenticated!\r\n"
+            "%s",
+            message);
+  } else if (which == 404) {
+    sprintf(buffer,
+            "HTTP/1.0 404 Not Found\r\n"
+            "Content-type: text/plain\r\n" STD_HEADER "\r\n"
+            "404: Not Found!\r\n"
+            "%s",
+            message);
+  } else if (which == 500) {
+    sprintf(buffer,
+            "HTTP/1.0 500 Internal Server Error\r\n"
+            "Content-type: text/plain\r\n" STD_HEADER "\r\n"
+            "500: Internal Server Error!\r\n"
+            "%s",
+            message);
+  } else if (which == 400) {
+    sprintf(buffer,
+            "HTTP/1.0 400 Bad Request\r\n"
+            "Content-type: text/plain\r\n" STD_HEADER "\r\n"
+            "400: Not Found!\r\n"
+            "%s",
+            message);
   } else {
-    sprintf(buffer, "HTTP/1.0 501 Not Implemented\r\n" \
-                    "Content-type: text/plain\r\n" \
-                    STD_HEADER \
-                    "\r\n" \
-                    "501: Not Implemented!\r\n" \
-                    "%s", message);
+    sprintf(buffer,
+            "HTTP/1.0 501 Not Implemented\r\n"
+            "Content-type: text/plain\r\n" STD_HEADER "\r\n"
+            "501: Not Implemented!\r\n"
+            "%s",
+            message);
   }
 
   write(fd, buffer, strlen(buffer));
@@ -408,30 +411,30 @@ Return Value: -
 ******************************************************************************/
 void httpd::send_file(int fd, char *parameter) {
   char buffer[BUFFER_SIZE] = {0};
-  char *extension, *mimetype=NULL;
+  char *extension, *mimetype = NULL;
   int i, lfd;
-  config conf = server->conf;    
-     
+  config conf = server->conf;
+
   /* in case no parameter was given */
-  if ( parameter == NULL || strlen(parameter) == 0 )
+  if (parameter == NULL || strlen(parameter) == 0)
     parameter = "index.html";
 
   /* find file-extension */
-  if ( (extension = strstr(parameter, ".")) == NULL ) {
+  if ((extension = strstr(parameter, ".")) == NULL) {
     send_error(fd, 400, "No file extension found");
     return;
   }
 
   /* determine mime-type */
-  for ( i=0; i < LENGTH_OF(mimetypes); i++ ) {
-    if ( strcmp(mimetypes[i].dot_extension, extension) == 0 ) {
+  for (i = 0; i < LENGTH_OF(mimetypes); i++) {
+    if (strcmp(mimetypes[i].dot_extension, extension) == 0) {
       mimetype = (char *)mimetypes[i].mimetype;
       break;
     }
   }
 
   /* in case of unknown mimetype or extension leave */
-  if ( mimetype == NULL ) {
+  if (mimetype == NULL) {
     send_error(fd, 404, "MIME-TYPE not known");
     return;
   }
@@ -440,11 +443,11 @@ void httpd::send_file(int fd, char *parameter) {
   DBG("trying to serve file \"%s\", extension: \"%s\" mime: \"%s\"\n", parameter, extension, mimetype);
 
   /* build the absolute path to the file */
-  strncat(buffer, conf.www_folder, sizeof(buffer)-1);
-  strncat(buffer, parameter, sizeof(buffer)-strlen(buffer)-1);
+  strncat(buffer, conf.www_folder, sizeof(buffer) - 1);
+  strncat(buffer, parameter, sizeof(buffer) - strlen(buffer) - 1);
 
   /* try to open that file */
-  if ( (lfd = open(buffer, O_RDONLY)) < 0 ) {
+  if ((lfd = open(buffer, O_RDONLY)) < 0) {
     DBG("file %s not accessible\n", buffer);
     send_error(fd, 404, "Could not open file");
     return;
@@ -452,19 +455,19 @@ void httpd::send_file(int fd, char *parameter) {
   DBG("opened file: %s\n", buffer);
 
   /* prepare HTTP header */
-  sprintf(buffer, "HTTP/1.0 200 OK\r\n" \
-                  "Content-type: %s\r\n" \
-                  STD_HEADER \
-                  "\r\n", mimetype);
+  sprintf(buffer,
+          "HTTP/1.0 200 OK\r\n"
+          "Content-type: %s\r\n" STD_HEADER "\r\n",
+          mimetype);
   i = strlen(buffer);
 
   /* first transmit HTTP-header, afterwards transmit content of file */
   do {
-    if ( write(fd, buffer, i) < 0 ) {
-      close(lfd);	  
+    if (write(fd, buffer, i) < 0) {
+      close(lfd);
       return;
     }
-  } while ( (i=read(lfd, buffer, sizeof(buffer))) > 0 );
+  } while ((i = read(lfd, buffer, sizeof(buffer))) > 0);
 
   /* close file, job done */
   close(lfd);
@@ -478,22 +481,22 @@ Input Value.: * fd.......: filedescriptor to send HTTP response to.
 Return Value: -
 ******************************************************************************/
 void httpd::command(int fd, char *parameter) {
-  char buffer[BUFFER_SIZE] = {0}, *command=NULL, *svalue=NULL, *section=NULL;
-  int i=0, res=0, ivalue=0, len=0;
+  char buffer[BUFFER_SIZE] = {0}, *command = NULL, *svalue = NULL, *section = NULL;
+  int i = 0, res = 0, ivalue = 0, len = 0;
   float fvalue = 0.0f;
   char ret_s[10] = {0};
 
   DBG("parameter is: %s\n", parameter);
 
   /* sanity check of parameter-string */
-  if ( parameter == NULL || strlen(parameter) >= 100 || strlen(parameter) == 0 ) {
+  if (parameter == NULL || strlen(parameter) >= 100 || strlen(parameter) == 0) {
     DBG("parameter string looks bad\n");
     send_error(fd, 400, "Parameter-string of command does not look valid.");
     return;
   }
 
   /* search for required variable "command" */
-  if ( (command = strstr(parameter, "command=")) == NULL ) {
+  if ((command = strstr(parameter, "command=")) == NULL) {
     DBG("no command specified\n");
     send_error(fd, 400, "no GET variable \"command=...\" found, it is required to specify which command to execute");
     return;
@@ -502,7 +505,7 @@ void httpd::command(int fd, char *parameter) {
   /* allocate and copy command string */
   command += strlen("command=");
   len = strspn(command, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890");
-  if ( (command = strndup(command, len)) == NULL ) {
+  if ((command = strndup(command, len)) == NULL) {
     send_error(fd, 500, "could not allocate memory");
     LOG("could not allocate memory\n");
     return;
@@ -510,11 +513,12 @@ void httpd::command(int fd, char *parameter) {
   DBG("command string: %s\n", command);
 
   /* find and convert optional parameter "value" */
-  if ( (svalue = strstr(parameter, "value=")) != NULL ) {
+  if ((svalue = strstr(parameter, "value=")) != NULL) {
     svalue += strlen("value=");
     len = strspn(svalue, "-1234567890.");
-    if ( (svalue = strndup(svalue, len)) == NULL ) {
-      if (command != NULL) free(command);
+    if ((svalue = strndup(svalue, len)) == NULL) {
+      if (command != NULL)
+        free(command);
       send_error(fd, 500, "could not allocate memory");
       LOG("could not allocate memory\n");
       return;
@@ -526,24 +530,26 @@ void httpd::command(int fd, char *parameter) {
   }
 
   /* search for required variable "section" */
-  if ( (section = strstr(parameter, "section=")) == NULL ) {
+  if ((section = strstr(parameter, "section=")) == NULL) {
     DBG("no section specified\n");
-  }
-  else
-  {
-      /* allocate and copy command string */
-      section += strlen("section=");
-      len = strspn(section, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890");
-      if ( (section = strndup(section, len)) == NULL ) {
-        send_error(fd, 500, "could not allocate memory");
-        LOG("could not allocate memory\n");
-        return;
-      }
+  } else {
+    /* allocate and copy command string */
+    section += strlen("section=");
+    len = strspn(section, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_1234567890");
+    if ((section = strndup(section, len)) == NULL) {
+      send_error(fd, 500, "could not allocate memory");
+      LOG("could not allocate memory\n");
+      return;
+    }
 
-      if(strcmp(section, "ball") == 0) finder = ball_finder;
-      else if(strcmp(section, "red") == 0) finder = red_finder;
-      else if(strcmp(section, "yellow") == 0) finder = yellow_finder;
-      else if(strcmp(section, "blue") == 0) finder = blue_finder;
+    if (strcmp(section, "ball") == 0)
+      finder = ball_finder;
+    else if (strcmp(section, "red") == 0)
+      finder = red_finder;
+    else if (strcmp(section, "yellow") == 0)
+      finder = yellow_finder;
+    else if (strcmp(section, "blue") == 0)
+      finder = blue_finder;
   }
 
   /*
@@ -552,304 +558,327 @@ void httpd::command(int fd, char *parameter) {
    * if the input-plugin does not implement the optional command
    * function, a short error is reported to the HTTP-client.
    */
-  for ( i=0; i < LENGTH_OF(in_cmd_mapping); i++ ) {
-    if ( strcmp(in_cmd_mapping[i].string, command) == 0 ) {
-/*
-      if ( pglobal->in.cmd == NULL ) {
-        send_error(fd, 501, "input plugin does not implement commands");
-        if (command != NULL) free(command);
-        return;
-      }
-*/
+  for (i = 0; i < LENGTH_OF(in_cmd_mapping); i++) {
+    if (strcmp(in_cmd_mapping[i].string, command) == 0) {
+      /*
+            if ( pglobal->in.cmd == NULL ) {
+              send_error(fd, 501, "input plugin does not implement commands");
+              if (command != NULL) free(command);
+              return;
+            }
+      */
 
-      //res = input_cmd(in_cmd_mapping[i].cmd, ivalue);
+      // res = input_cmd(in_cmd_mapping[i].cmd, ivalue);
       input_cmd(in_cmd_mapping[i].cmd, fvalue, ret_s);
       break;
     }
   }
 
   /* check if the command is for the output plugin itself */
-  for ( i=0; i < LENGTH_OF(out_cmd_mapping); i++ ) {
-    if ( strcmp(out_cmd_mapping[i].string, command) == 0 ) {
-      //res = output_cmd(id, out_cmd_mapping[i].cmd, ivalue);
+  for (i = 0; i < LENGTH_OF(out_cmd_mapping); i++) {
+    if (strcmp(out_cmd_mapping[i].string, command) == 0) {
+      // res = output_cmd(id, out_cmd_mapping[i].cmd, ivalue);
       break;
     }
   }
 
   /* Send HTTP-response */
-  sprintf(buffer, "HTTP/1.0 200 OK\r\n" \
-                  "Content-type: text/plain\r\n" \
-                  STD_HEADER \
-                  "\r\n" \
-                  "%s: %s", command, ret_s);
+  sprintf(buffer,
+          "HTTP/1.0 200 OK\r\n"
+          "Content-type: text/plain\r\n" STD_HEADER "\r\n"
+          "%s: %s",
+          command, ret_s);
 
   write(fd, buffer, strlen(buffer));
 
-  if (command != NULL) free(command);
+  if (command != NULL)
+    free(command);
 }
 
-void httpd::input_cmd(in_cmd_type cmd, float value, char* res_str)
-{
-    int res = -1;
+void httpd::input_cmd(in_cmd_type cmd, float value, char *res_str) {
+  int res = -1;
 
-    //pthread_mutex_lock(&controls_mutex);
+  // pthread_mutex_lock(&controls_mutex);
 
-    if(ini == NULL) ini = new minIni("config.ini");
+  if (ini == NULL)
+    ini = new minIni("config.ini");
 
-    switch(cmd) {
+  switch (cmd) {
     case IN_CMD_RELOAD:
-        Robot::LinuxCamera::GetInstance()->LoadINISettings(ini);
-        if(finder == NULL) return;
-        if(finder->color_section == "")
-            finder->LoadINISettings(ini);
-        else
-            finder->LoadINISettings(ini, finder->color_section);
-        strcpy(res_str, "RELOAD");
-        break;
+      Robot::LinuxCamera::GetInstance()->LoadINISettings(ini);
+      if (finder == NULL)
+        return;
+      if (finder->color_section == "")
+        finder->LoadINISettings(ini);
+      else
+        finder->LoadINISettings(ini, finder->color_section);
+      strcpy(res_str, "RELOAD");
+      break;
     case IN_CMD_SAVE:
-        Robot::LinuxCamera::GetInstance()->SaveINISettings(ini);
-        if(finder == NULL) return;
-        if(finder->color_section == "")
-            finder->SaveINISettings(ini);
-        else
-            finder->SaveINISettings(ini, finder->color_section);
-        strcpy(res_str, "SAVE");
-        break;
+      Robot::LinuxCamera::GetInstance()->SaveINISettings(ini);
+      if (finder == NULL)
+        return;
+      if (finder->color_section == "")
+        finder->SaveINISettings(ini);
+      else
+        finder->SaveINISettings(ini, finder->color_section);
+      strcpy(res_str, "SAVE");
+      break;
     case IN_CMD_GAIN_PLUS:
-        res = Robot::LinuxCamera::GetInstance()->v4l2GetControl(V4L2_CID_GAIN);
-        sprintf(res_str, "%d", res);
-        if(res < 255)
-            Robot::LinuxCamera::GetInstance()->v4l2SetControl(V4L2_CID_GAIN, res+(int)value);
-        sprintf(res_str, "%d", Robot::LinuxCamera::GetInstance()->v4l2GetControl(V4L2_CID_GAIN));
-        break;
+      res = Robot::LinuxCamera::GetInstance()->v4l2GetControl(V4L2_CID_GAIN);
+      sprintf(res_str, "%d", res);
+      if (res < 255)
+        Robot::LinuxCamera::GetInstance()->v4l2SetControl(V4L2_CID_GAIN, res + (int)value);
+      sprintf(res_str, "%d", Robot::LinuxCamera::GetInstance()->v4l2GetControl(V4L2_CID_GAIN));
+      break;
     case IN_CMD_GAIN_MINUS:
-        res = Robot::LinuxCamera::GetInstance()->v4l2GetControl(V4L2_CID_GAIN);
-        sprintf(res_str, "%d", res);
-        if(res > 0)
-            Robot::LinuxCamera::GetInstance()->v4l2SetControl(V4L2_CID_GAIN, res-(int)value);
-        sprintf(res_str, "%d", Robot::LinuxCamera::GetInstance()->v4l2GetControl(V4L2_CID_GAIN));
-        break;
+      res = Robot::LinuxCamera::GetInstance()->v4l2GetControl(V4L2_CID_GAIN);
+      sprintf(res_str, "%d", res);
+      if (res > 0)
+        Robot::LinuxCamera::GetInstance()->v4l2SetControl(V4L2_CID_GAIN, res - (int)value);
+      sprintf(res_str, "%d", Robot::LinuxCamera::GetInstance()->v4l2GetControl(V4L2_CID_GAIN));
+      break;
     case IN_CMD_EXPOSURE_PLUS:
-        res = Robot::LinuxCamera::GetInstance()->v4l2GetControl(V4L2_CID_EXPOSURE_ABSOLUTE);
-        sprintf(res_str, "%d", res);
-        if(res < 10000)
-            Robot::LinuxCamera::GetInstance()->v4l2SetControl(V4L2_CID_EXPOSURE_ABSOLUTE, res+(int)value);
-        sprintf(res_str, "%d", Robot::LinuxCamera::GetInstance()->v4l2GetControl(V4L2_CID_EXPOSURE_ABSOLUTE));
-        break;
+      res = Robot::LinuxCamera::GetInstance()->v4l2GetControl(V4L2_CID_EXPOSURE_ABSOLUTE);
+      sprintf(res_str, "%d", res);
+      if (res < 10000)
+        Robot::LinuxCamera::GetInstance()->v4l2SetControl(V4L2_CID_EXPOSURE_ABSOLUTE, res + (int)value);
+      sprintf(res_str, "%d", Robot::LinuxCamera::GetInstance()->v4l2GetControl(V4L2_CID_EXPOSURE_ABSOLUTE));
+      break;
     case IN_CMD_EXPOSURE_MINUS:
-        res = Robot::LinuxCamera::GetInstance()->v4l2GetControl(V4L2_CID_EXPOSURE_ABSOLUTE);
-        sprintf(res_str, "%d", res);
-        if(res > 0)
-            Robot::LinuxCamera::GetInstance()->v4l2SetControl(V4L2_CID_EXPOSURE_ABSOLUTE, res-(int)value);
-        sprintf(res_str, "%d", Robot::LinuxCamera::GetInstance()->v4l2GetControl(V4L2_CID_EXPOSURE_ABSOLUTE));
-        break;
+      res = Robot::LinuxCamera::GetInstance()->v4l2GetControl(V4L2_CID_EXPOSURE_ABSOLUTE);
+      sprintf(res_str, "%d", res);
+      if (res > 0)
+        Robot::LinuxCamera::GetInstance()->v4l2SetControl(V4L2_CID_EXPOSURE_ABSOLUTE, res - (int)value);
+      sprintf(res_str, "%d", Robot::LinuxCamera::GetInstance()->v4l2GetControl(V4L2_CID_EXPOSURE_ABSOLUTE));
+      break;
     case IN_CMD_HUE_SET:
-        if(finder == NULL) return;
-        finder->m_hue = (int)value;
-        sprintf(res_str, "%d", (int)value);
-        break;
+      if (finder == NULL)
+        return;
+      finder->m_hue = (int)value;
+      sprintf(res_str, "%d", (int)value);
+      break;
     case IN_CMD_HUE_PLUS:
-        if(finder == NULL) return;
-        finder->m_hue += (int)value;
-        if(finder->m_hue > 360) finder->m_hue = 360;
-        sprintf(res_str, "%d", finder->m_hue);
-        break;
+      if (finder == NULL)
+        return;
+      finder->m_hue += (int)value;
+      if (finder->m_hue > 360)
+        finder->m_hue = 360;
+      sprintf(res_str, "%d", finder->m_hue);
+      break;
     case IN_CMD_HUE_MINUS:
-        if(finder == NULL) return;
-        finder->m_hue -= (int)value;
-        if(finder->m_hue < 0) finder->m_hue = 0;
-        sprintf(res_str, "%d", finder->m_hue);
-        break;
+      if (finder == NULL)
+        return;
+      finder->m_hue -= (int)value;
+      if (finder->m_hue < 0)
+        finder->m_hue = 0;
+      sprintf(res_str, "%d", finder->m_hue);
+      break;
     case IN_CMD_TOLERANCE_SET:
-        if(finder == NULL) return;
-        finder->m_hue_tolerance = (int)value;
-        sprintf(res_str, "%d", (int)value);
-        break;
+      if (finder == NULL)
+        return;
+      finder->m_hue_tolerance = (int)value;
+      sprintf(res_str, "%d", (int)value);
+      break;
     case IN_CMD_TOLERANCE_PLUS:
-        if(finder == NULL) return;
-        finder->m_hue_tolerance += (int)value;
-        if(finder->m_hue_tolerance > 179) finder->m_hue_tolerance = 180;
-        sprintf(res_str, "%d", finder->m_hue_tolerance);
-        break;
+      if (finder == NULL)
+        return;
+      finder->m_hue_tolerance += (int)value;
+      if (finder->m_hue_tolerance > 179)
+        finder->m_hue_tolerance = 180;
+      sprintf(res_str, "%d", finder->m_hue_tolerance);
+      break;
     case IN_CMD_TOLERANCE_MINUS:
-        if(finder == NULL) return;
-        finder->m_hue_tolerance -= (int)value;
-        if(finder->m_hue_tolerance < 0) finder->m_hue_tolerance = 0;
-        sprintf(res_str, "%d", finder->m_hue_tolerance);
-        break;
+      if (finder == NULL)
+        return;
+      finder->m_hue_tolerance -= (int)value;
+      if (finder->m_hue_tolerance < 0)
+        finder->m_hue_tolerance = 0;
+      sprintf(res_str, "%d", finder->m_hue_tolerance);
+      break;
     case IN_CMD_MIN_SATURATION_SET:
-        if(finder == NULL) return;
-        finder->m_min_saturation = (int)value;
-        sprintf(res_str, "%d", (int)value);
-        break;
+      if (finder == NULL)
+        return;
+      finder->m_min_saturation = (int)value;
+      sprintf(res_str, "%d", (int)value);
+      break;
     case IN_CMD_MIN_SATURATION_PLUS:
-        if(finder == NULL) return;
-        finder->m_min_saturation += (int)value;
-        if(finder->m_min_saturation > 100) finder->m_min_saturation = 100;
-        sprintf(res_str, "%d", finder->m_min_saturation);
-        break;
+      if (finder == NULL)
+        return;
+      finder->m_min_saturation += (int)value;
+      if (finder->m_min_saturation > 100)
+        finder->m_min_saturation = 100;
+      sprintf(res_str, "%d", finder->m_min_saturation);
+      break;
     case IN_CMD_MIN_SATURATION_MINUS:
-        if(finder == NULL) return;
-        finder->m_min_saturation -= (int)value;
-        if(finder->m_min_saturation < 0) finder->m_min_saturation = 0;
-        sprintf(res_str, "%d", finder->m_min_saturation);
-        break;
+      if (finder == NULL)
+        return;
+      finder->m_min_saturation -= (int)value;
+      if (finder->m_min_saturation < 0)
+        finder->m_min_saturation = 0;
+      sprintf(res_str, "%d", finder->m_min_saturation);
+      break;
     case IN_CMD_MIN_VALUE_SET:
-        if(finder == NULL) return;
-        finder->m_min_value = (int)value;
-        sprintf(res_str, "%d", (int)value);
-        break;
+      if (finder == NULL)
+        return;
+      finder->m_min_value = (int)value;
+      sprintf(res_str, "%d", (int)value);
+      break;
     case IN_CMD_MIN_VALUE_PLUS:
-        if(finder == NULL) return;
-        finder->m_min_value += (int)value;
-        if(finder->m_min_value > 100) finder->m_min_value = 100;
-        sprintf(res_str, "%d", finder->m_min_value);
-        break;
+      if (finder == NULL)
+        return;
+      finder->m_min_value += (int)value;
+      if (finder->m_min_value > 100)
+        finder->m_min_value = 100;
+      sprintf(res_str, "%d", finder->m_min_value);
+      break;
     case IN_CMD_MIN_VALUE_MINUS:
-        if(finder == NULL) return;
-        finder->m_min_value -= (int)value;
-        if(finder->m_min_value < 0) finder->m_min_value = 0;
-        sprintf(res_str, "%d", finder->m_min_value);
-        break;
+      if (finder == NULL)
+        return;
+      finder->m_min_value -= (int)value;
+      if (finder->m_min_value < 0)
+        finder->m_min_value = 0;
+      sprintf(res_str, "%d", finder->m_min_value);
+      break;
 
     case IN_CMD_WALK_MODE:
-        if(value == 1)
-        {
-            Walking::GetInstance()->Start();
-            strcpy(res_str, "ON");
-        }
-        else
-        {
-            Walking::GetInstance()->Stop();
-            Walking::GetInstance()->X_MOVE_AMPLITUDE = 0;
-            Walking::GetInstance()->Y_MOVE_AMPLITUDE = 0;
-            Walking::GetInstance()->A_MOVE_AMPLITUDE = 0;
-            strcpy(res_str, "OFF");
-        }
-        break;
+      if (value == 1) {
+        Walking::GetInstance()->Start();
+        strcpy(res_str, "ON");
+      } else {
+        Walking::GetInstance()->Stop();
+        Walking::GetInstance()->X_MOVE_AMPLITUDE = 0;
+        Walking::GetInstance()->Y_MOVE_AMPLITUDE = 0;
+        Walking::GetInstance()->A_MOVE_AMPLITUDE = 0;
+        strcpy(res_str, "OFF");
+      }
+      break;
     case IN_CMD_WALK_SAVE:
-        Walking::GetInstance()->SaveINISettings(ini);
-        fprintf(stderr, "WALK_SAVE\n");
-        strcpy(res_str, "SAVED");
-        break;
+      Walking::GetInstance()->SaveINISettings(ini);
+      fprintf(stderr, "WALK_SAVE\n");
+      strcpy(res_str, "SAVED");
+      break;
     case IN_CMD_WALK_X_OFFSET:
-        Walking::GetInstance()->X_OFFSET += value;
-        sprintf(res_str, "%d", (int)Walking::GetInstance()->X_OFFSET);
-        break;
+      Walking::GetInstance()->X_OFFSET += value;
+      sprintf(res_str, "%d", (int)Walking::GetInstance()->X_OFFSET);
+      break;
     case IN_CMD_WALK_Y_OFFSET:
-        Walking::GetInstance()->Y_OFFSET += value;
-        sprintf(res_str, "%d", (int)Walking::GetInstance()->Y_OFFSET);
-        break;
+      Walking::GetInstance()->Y_OFFSET += value;
+      sprintf(res_str, "%d", (int)Walking::GetInstance()->Y_OFFSET);
+      break;
     case IN_CMD_WALK_Z_OFFSET:
-        Walking::GetInstance()->Z_OFFSET += value;
-        sprintf(res_str, "%d", (int)Walking::GetInstance()->Z_OFFSET);
-        break;
+      Walking::GetInstance()->Z_OFFSET += value;
+      sprintf(res_str, "%d", (int)Walking::GetInstance()->Z_OFFSET);
+      break;
     case IN_CMD_WALK_ROLL_OFFSET:
-        Walking::GetInstance()->R_OFFSET += value;
-        sprintf(res_str, "%.1f", Walking::GetInstance()->R_OFFSET);
-        break;
+      Walking::GetInstance()->R_OFFSET += value;
+      sprintf(res_str, "%.1f", Walking::GetInstance()->R_OFFSET);
+      break;
     case IN_CMD_WALK_PITCH_OFFSET:
-        Walking::GetInstance()->P_OFFSET += value;
-        sprintf(res_str, "%.1f", Walking::GetInstance()->P_OFFSET);
-        break;
+      Walking::GetInstance()->P_OFFSET += value;
+      sprintf(res_str, "%.1f", Walking::GetInstance()->P_OFFSET);
+      break;
     case IN_CMD_WALK_YAW_OFFSET:
-        Walking::GetInstance()->A_OFFSET += value;
-        sprintf(res_str, "%.1f", Walking::GetInstance()->A_OFFSET);
-        break;
+      Walking::GetInstance()->A_OFFSET += value;
+      sprintf(res_str, "%.1f", Walking::GetInstance()->A_OFFSET);
+      break;
     case IN_CMD_WALK_HIP_OFFSET:
-        Walking::GetInstance()->HIP_PITCH_OFFSET += value;
-        sprintf(res_str, "%.1f", Walking::GetInstance()->HIP_PITCH_OFFSET);
-        break;
+      Walking::GetInstance()->HIP_PITCH_OFFSET += value;
+      sprintf(res_str, "%.1f", Walking::GetInstance()->HIP_PITCH_OFFSET);
+      break;
     case IN_CMD_WALK_AUTO_BALANCE:
-        Walking::GetInstance()->BALANCE_ENABLE = value;
-        if(Walking::GetInstance()->BALANCE_ENABLE) strcpy(res_str, "ON");
-        else strcpy(res_str, "OFF");
-        break;
+      Walking::GetInstance()->BALANCE_ENABLE = value;
+      if (Walking::GetInstance()->BALANCE_ENABLE)
+        strcpy(res_str, "ON");
+      else
+        strcpy(res_str, "OFF");
+      break;
     case IN_CMD_WALK_PERIOD_TIME:
-        Walking::GetInstance()->PERIOD_TIME += value;
-        sprintf(res_str, "%d", (int)Walking::GetInstance()->PERIOD_TIME);
-        break;
+      Walking::GetInstance()->PERIOD_TIME += value;
+      sprintf(res_str, "%d", (int)Walking::GetInstance()->PERIOD_TIME);
+      break;
     case IN_CMD_WALK_DSP_RATIO:
-        Walking::GetInstance()->DSP_RATIO += value;
-        sprintf(res_str, "%.2f", Walking::GetInstance()->DSP_RATIO);
-        break;
+      Walking::GetInstance()->DSP_RATIO += value;
+      sprintf(res_str, "%.2f", Walking::GetInstance()->DSP_RATIO);
+      break;
     case IN_CMD_WALK_STEP_FB_RATIO:
-        Walking::GetInstance()->STEP_FB_RATIO += value;
-        sprintf(res_str, "%.2f", Walking::GetInstance()->STEP_FB_RATIO);
-        break;
+      Walking::GetInstance()->STEP_FB_RATIO += value;
+      sprintf(res_str, "%.2f", Walking::GetInstance()->STEP_FB_RATIO);
+      break;
     case IN_CMD_WALK_STEP_FB:
-        Walking::GetInstance()->X_MOVE_AMPLITUDE += value;
-        sprintf(res_str, "%d", (int)Walking::GetInstance()->X_MOVE_AMPLITUDE);
-        break;
+      Walking::GetInstance()->X_MOVE_AMPLITUDE += value;
+      sprintf(res_str, "%d", (int)Walking::GetInstance()->X_MOVE_AMPLITUDE);
+      break;
     case IN_CMD_WALK_STEP_RL:
-        Walking::GetInstance()->Y_MOVE_AMPLITUDE += value;
-        sprintf(res_str, "%d", (int)Walking::GetInstance()->Y_MOVE_AMPLITUDE);
-        break;
+      Walking::GetInstance()->Y_MOVE_AMPLITUDE += value;
+      sprintf(res_str, "%d", (int)Walking::GetInstance()->Y_MOVE_AMPLITUDE);
+      break;
     case IN_CMD_WALK_STEP_DIR:
-        Walking::GetInstance()->A_MOVE_AMPLITUDE += value;
-        sprintf(res_str, "%d", (int)Walking::GetInstance()->A_MOVE_AMPLITUDE);
-        break;
+      Walking::GetInstance()->A_MOVE_AMPLITUDE += value;
+      sprintf(res_str, "%d", (int)Walking::GetInstance()->A_MOVE_AMPLITUDE);
+      break;
     case IN_CMD_WALK_TURN_AIM:
-        Walking::GetInstance()->A_MOVE_AIM_ON = value;
-        if(Walking::GetInstance()->A_MOVE_AIM_ON) strcpy(res_str, "ON");
-        else strcpy(res_str, "OFF");
-        break;
+      Walking::GetInstance()->A_MOVE_AIM_ON = value;
+      if (Walking::GetInstance()->A_MOVE_AIM_ON)
+        strcpy(res_str, "ON");
+      else
+        strcpy(res_str, "OFF");
+      break;
     case IN_CMD_WALK_FOOT_HEIGHT:
-        Walking::GetInstance()->Z_MOVE_AMPLITUDE += value;
-        sprintf(res_str, "%d", (int)Walking::GetInstance()->Z_MOVE_AMPLITUDE);
-        break;
+      Walking::GetInstance()->Z_MOVE_AMPLITUDE += value;
+      sprintf(res_str, "%d", (int)Walking::GetInstance()->Z_MOVE_AMPLITUDE);
+      break;
     case IN_CMD_WALK_SWING_RL:
-        Walking::GetInstance()->Y_SWAP_AMPLITUDE += value;
-        sprintf(res_str, "%.1f", Walking::GetInstance()->Y_SWAP_AMPLITUDE);
-        break;
+      Walking::GetInstance()->Y_SWAP_AMPLITUDE += value;
+      sprintf(res_str, "%.1f", Walking::GetInstance()->Y_SWAP_AMPLITUDE);
+      break;
     case IN_CMD_WALK_SWING_TD:
-        Walking::GetInstance()->Z_SWAP_AMPLITUDE += value;
-        sprintf(res_str, "%d", (int)Walking::GetInstance()->Z_SWAP_AMPLITUDE);
-        break;
+      Walking::GetInstance()->Z_SWAP_AMPLITUDE += value;
+      sprintf(res_str, "%d", (int)Walking::GetInstance()->Z_SWAP_AMPLITUDE);
+      break;
     case IN_CMD_WALK_PELVIS_OFFSET:
-        Walking::GetInstance()->PELVIS_OFFSET += value;
-        sprintf(res_str, "%.1f", Walking::GetInstance()->PELVIS_OFFSET);
-        break;
+      Walking::GetInstance()->PELVIS_OFFSET += value;
+      sprintf(res_str, "%.1f", Walking::GetInstance()->PELVIS_OFFSET);
+      break;
     case IN_CMD_WALK_ARM_SWING_GAIN:
-        Walking::GetInstance()->ARM_SWING_GAIN += value;
-        sprintf(res_str, "%.1f", Walking::GetInstance()->ARM_SWING_GAIN);
-        break;
+      Walking::GetInstance()->ARM_SWING_GAIN += value;
+      sprintf(res_str, "%.1f", Walking::GetInstance()->ARM_SWING_GAIN);
+      break;
     case IN_CMD_WALK_B_KNEE_GAIN:
-        Walking::GetInstance()->BALANCE_KNEE_GAIN += value;
-        sprintf(res_str, "%.2f", Walking::GetInstance()->BALANCE_KNEE_GAIN);
-        break;
+      Walking::GetInstance()->BALANCE_KNEE_GAIN += value;
+      sprintf(res_str, "%.2f", Walking::GetInstance()->BALANCE_KNEE_GAIN);
+      break;
     case IN_CMD_WALK_B_ANKLE_PITCH_GAIN:
-        Walking::GetInstance()->BALANCE_ANKLE_PITCH_GAIN += value;
-        sprintf(res_str, "%.2f", Walking::GetInstance()->BALANCE_ANKLE_PITCH_GAIN);
-        break;
+      Walking::GetInstance()->BALANCE_ANKLE_PITCH_GAIN += value;
+      sprintf(res_str, "%.2f", Walking::GetInstance()->BALANCE_ANKLE_PITCH_GAIN);
+      break;
     case IN_CMD_WALK_B_HIP_ROLL_GAIN:
-        Walking::GetInstance()->BALANCE_HIP_ROLL_GAIN += value;
-        sprintf(res_str, "%.2f", Walking::GetInstance()->BALANCE_HIP_ROLL_GAIN);
-        break;
+      Walking::GetInstance()->BALANCE_HIP_ROLL_GAIN += value;
+      sprintf(res_str, "%.2f", Walking::GetInstance()->BALANCE_HIP_ROLL_GAIN);
+      break;
     case IN_CMD_WALK_B_ANKLE_ROLL_GAIN:
-        Walking::GetInstance()->BALANCE_ANKLE_ROLL_GAIN += value;
-        sprintf(res_str, "%.2f", Walking::GetInstance()->BALANCE_ANKLE_ROLL_GAIN);
-        break;
+      Walking::GetInstance()->BALANCE_ANKLE_ROLL_GAIN += value;
+      sprintf(res_str, "%.2f", Walking::GetInstance()->BALANCE_ANKLE_ROLL_GAIN);
+      break;
     case IN_CMD_WALK_P_GAIN:
-        Walking::GetInstance()->P_GAIN += (int)value;
-        sprintf(res_str, "%d", Walking::GetInstance()->P_GAIN);
-        break;
+      Walking::GetInstance()->P_GAIN += (int)value;
+      sprintf(res_str, "%d", Walking::GetInstance()->P_GAIN);
+      break;
     case IN_CMD_WALK_I_GAIN:
-        Walking::GetInstance()->I_GAIN += (int)value;
-        sprintf(res_str, "%d", Walking::GetInstance()->I_GAIN);
-        break;
+      Walking::GetInstance()->I_GAIN += (int)value;
+      sprintf(res_str, "%d", Walking::GetInstance()->I_GAIN);
+      break;
     case IN_CMD_WALK_D_GAIN:
-        Walking::GetInstance()->D_GAIN += (int)value;
-        sprintf(res_str, "%d", Walking::GetInstance()->D_GAIN);
-        break;
+      Walking::GetInstance()->D_GAIN += (int)value;
+      sprintf(res_str, "%d", Walking::GetInstance()->D_GAIN);
+      break;
 
     default:
-        res = -1;
-    }
+      res = -1;
+  }
 
-    //pthread_mutex_unlock(&controls_mutex);
+  // pthread_mutex_unlock(&controls_mutex);
 }
-
 
 /******************************************************************************
 Description.: Serve a connected TCP-client. This thread function is called
@@ -862,9 +891,9 @@ Input Value.: arg is the filedescriptor and server-context of the connected TCP
 Return Value: always NULL
 ******************************************************************************/
 /* thread for clients that connected to this server */
-void* httpd::client_thread( void *arg ) {
+void *httpd::client_thread(void *arg) {
   int cnt;
-  char buffer[BUFFER_SIZE]={0}, *pb=buffer;
+  char buffer[BUFFER_SIZE] = {0}, *pb = buffer;
   iobuffer iobuf;
   request req;
   cfd lcfd; /* local-connected-file-descriptor */
@@ -873,8 +902,7 @@ void* httpd::client_thread( void *arg ) {
   if (arg != NULL) {
     memcpy(&lcfd, arg, sizeof(cfd));
     free(arg);
-  }
-  else
+  } else
     return NULL;
 
   /* initializes the structures */
@@ -883,24 +911,22 @@ void* httpd::client_thread( void *arg ) {
 
   /* What does the client want to receive? Read the request. */
   memset(buffer, 0, sizeof(buffer));
-  if ( (cnt = _readline(lcfd.fd, &iobuf, buffer, sizeof(buffer)-1, 5)) == -1 ) {
+  if ((cnt = _readline(lcfd.fd, &iobuf, buffer, sizeof(buffer) - 1, 5)) == -1) {
     close(lcfd.fd);
     return NULL;
   }
 
   /* determine what to deliver */
-  if ( strstr(buffer, "GET /?action=snapshot") != NULL ) {
+  if (strstr(buffer, "GET /?action=snapshot") != NULL) {
     req.type = A_SNAPSHOT;
-  }
-  else if ( strstr(buffer, "GET /?action=stream") != NULL ) {
+  } else if (strstr(buffer, "GET /?action=stream") != NULL) {
     req.type = A_STREAM;
-  }
-  else if ( strstr(buffer, "GET /?action=command") != NULL ) {
+  } else if (strstr(buffer, "GET /?action=command") != NULL) {
     int len;
     req.type = A_COMMAND;
 
     /* advance by the length of known string */
-    if ( (pb = strstr(buffer, "GET /?action=command")) == NULL ) {
+    if ((pb = strstr(buffer, "GET /?action=command")) == NULL) {
       DBG("HTTP request seems to be malformed\n");
       send_error(lcfd.fd, 400, "Malformed HTTP request");
       close(lcfd.fd);
@@ -910,22 +936,21 @@ void* httpd::client_thread( void *arg ) {
 
     /* only accept certain characters */
     len = MIN(MAX(strspn(pb, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-=&1234567890."), 0), 100);
-    req.parameter = (char*)malloc(len+1);
-    if ( req.parameter == NULL ) {
+    req.parameter = (char *)malloc(len + 1);
+    if (req.parameter == NULL) {
       exit(EXIT_FAILURE);
     }
-    memset(req.parameter, 0, len+1);
+    memset(req.parameter, 0, len + 1);
     strncpy(req.parameter, pb, len);
 
     DBG("command parameter (len: %d): \"%s\"\n", len, req.parameter);
-  }
-  else {
+  } else {
     int len;
 
     DBG("try to serve a file\n");
     req.type = A_FILE;
 
-    if ( (pb = strstr(buffer, "GET /")) == NULL ) {
+    if ((pb = strstr(buffer, "GET /")) == NULL) {
       DBG("HTTP request seems to be malformed\n");
       send_error(lcfd.fd, 400, "Malformed HTTP request");
       close(lcfd.fd);
@@ -934,11 +959,11 @@ void* httpd::client_thread( void *arg ) {
 
     pb += strlen("GET /");
     len = MIN(MAX(strspn(pb, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ._-1234567890"), 0), 100);
-    req.parameter = (char*)malloc(len+1);
-    if ( req.parameter == NULL ) {
+    req.parameter = (char *)malloc(len + 1);
+    if (req.parameter == NULL) {
       exit(EXIT_FAILURE);
     }
-    memset(req.parameter, 0, len+1);
+    memset(req.parameter, 0, len + 1);
     strncpy(req.parameter, pb, len);
 
     DBG("parameter (len: %d): \"%s\"\n", len, req.parameter);
@@ -951,32 +976,34 @@ void* httpd::client_thread( void *arg ) {
   do {
     memset(buffer, 0, sizeof(buffer));
 
-    if ( (cnt = _readline(lcfd.fd, &iobuf, buffer, sizeof(buffer)-1, 5)) == -1 ) {
+    if ((cnt = _readline(lcfd.fd, &iobuf, buffer, sizeof(buffer) - 1, 5)) == -1) {
       free_request(&req);
       close(lcfd.fd);
       return NULL;
     }
 
-    if ( strstr(buffer, "User-Agent: ") != NULL ) {
-      req.client = strdup(buffer+strlen("User-Agent: "));
-    }
-    else if ( strstr(buffer, "Authorization: Basic ") != NULL ) {
-      req.credentials = strdup(buffer+strlen("Authorization: Basic "));
+    if (strstr(buffer, "User-Agent: ") != NULL) {
+      req.client = strdup(buffer + strlen("User-Agent: "));
+    } else if (strstr(buffer, "Authorization: Basic ") != NULL) {
+      req.credentials = strdup(buffer + strlen("Authorization: Basic "));
       decodeBase64(req.credentials);
       DBG("username:password: %s\n", req.credentials);
     }
 
-  } while( cnt > 2 && !(buffer[0] == '\r' && buffer[1] == '\n') );
+  } while (cnt > 2 && !(buffer[0] == '\r' && buffer[1] == '\n'));
 
   /* check for username and password if parameter -c was given */
-  if ( lcfd.pc->conf.credentials != NULL ) {
-    if ( req.credentials == NULL || strcmp(lcfd.pc->conf.credentials, req.credentials) != 0 ) {
+  if (lcfd.pc->conf.credentials != NULL) {
+    if (req.credentials == NULL || strcmp(lcfd.pc->conf.credentials, req.credentials) != 0) {
       DBG("access denied\n");
       send_error(lcfd.fd, 401, "username and password do not match to configuration");
       close(lcfd.fd);
-      if ( req.parameter != NULL ) free(req.parameter);
-      if ( req.client != NULL ) free(req.client);
-      if ( req.credentials != NULL ) free(req.credentials);
+      if (req.parameter != NULL)
+        free(req.parameter);
+      if (req.client != NULL)
+        free(req.client);
+      if (req.credentials != NULL)
+        free(req.credentials);
       return NULL;
     }
     DBG("access granted\n");
@@ -985,28 +1012,28 @@ void* httpd::client_thread( void *arg ) {
   ClientRequest = true;
 
   /* now it's time to answer */
-  switch ( req.type ) {
+  switch (req.type) {
     case A_SNAPSHOT:
       DBG("Request for snapshot\n");
       send_snapshot(lcfd.fd);
       break;
     case A_STREAM:
       DBG("Request for stream\n");
-      send_stream(lcfd.fd);	  
+      send_stream(lcfd.fd);
       break;
     case A_COMMAND:
-      if ( lcfd.pc->conf.nocommands ) {
+      if (lcfd.pc->conf.nocommands) {
         send_error(lcfd.fd, 501, "this server is configured to not accept commands");
         break;
       }
       command(lcfd.fd, req.parameter);
       break;
     case A_FILE:
-      if ( lcfd.pc->conf.www_folder == NULL )
+      if (lcfd.pc->conf.www_folder == NULL)
         send_error(lcfd.fd, 501, "no www-folder configured");
       else
-	    send_file(lcfd.fd, req.parameter);
-	  break;
+        send_file(lcfd.fd, req.parameter);
+      break;
     default:
       DBG("unknown request\n");
   }
@@ -1024,9 +1051,9 @@ Input Value.: arg is not used
 Return Value: -
 ******************************************************************************/
 void httpd::server_cleanup(void *arg) {
-  context *pcontext = (context*)arg;
+  context *pcontext = (context *)arg;
 
-  //OPRINT("cleaning up ressources allocated by server thread #%02d\n", pcontext->id);
+  // OPRINT("cleaning up ressources allocated by server thread #%02d\n", pcontext->id);
 
   close(pcontext->sd);
 }
@@ -1037,13 +1064,13 @@ Description.: Open a TCP socket and wait for clients to connect. If clients
 Input Value.: arg is a pointer to the globals struct
 Return Value: always NULL, will only return on exit
 ******************************************************************************/
-void* httpd::server_thread( void *arg ) {
+void *httpd::server_thread(void *arg) {
   struct sockaddr_in addr, client_addr;
   int on;
   pthread_t client;
   socklen_t addr_len = sizeof(struct sockaddr_in);
 
-  server = (context*)arg;
+  server = (context *)arg;
   pglobal = server->pglobal;
 
   /* set cleanup handler to cleanup ressources */
@@ -1051,7 +1078,7 @@ void* httpd::server_thread( void *arg ) {
 
   /* open socket for server */
   server->sd = socket(PF_INET, SOCK_STREAM, 0);
-  if ( server->sd < 0 ) {
+  if (server->sd < 0) {
     fprintf(stderr, "socket failed\n");
     exit(EXIT_FAILURE);
   }
@@ -1071,7 +1098,7 @@ void* httpd::server_thread( void *arg ) {
   addr.sin_family = AF_INET;
   addr.sin_port = server->conf.port; /* is already in right byteorder */
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
-  if ( bind(server->sd, (struct sockaddr*)&addr, sizeof(addr)) != 0 ) {
+  if (bind(server->sd, (struct sockaddr *)&addr, sizeof(addr)) != 0) {
     perror("bind");
     OPRINT("%s(): bind(%d) failed", __FUNCTION__, htons(server->conf.port));
     closelog();
@@ -1079,15 +1106,15 @@ void* httpd::server_thread( void *arg ) {
   }
 
   /* start listening on socket */
-  if ( listen(server->sd, 10) != 0 ) {
+  if (listen(server->sd, 10) != 0) {
     fprintf(stderr, "listen failed\n");
     exit(EXIT_FAILURE);
   }
 
   /* create a child for every client that connects */
-  while ( 1 /*!pglobal->stop*/ ) {
-    //int *pfd = (int *)malloc(sizeof(int));
-    cfd *pcfd = (cfd*)malloc(sizeof(cfd));
+  while (1 /*!pglobal->stop*/) {
+    // int *pfd = (int *)malloc(sizeof(int));
+    cfd *pcfd = (cfd *)malloc(sizeof(cfd));
 
     if (pcfd == NULL) {
       fprintf(stderr, "failed to allocate (a very small amount of) memory\n");
@@ -1102,7 +1129,7 @@ void* httpd::server_thread( void *arg ) {
     DBG("create thread to handle client that just established a connection\n");
     syslog(LOG_INFO, "serving client: %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 
-    if( pthread_create(&client, NULL, &client_thread, pcfd) != 0 ) {
+    if (pthread_create(&client, NULL, &client_thread, pcfd) != 0) {
       DBG("could not launch another client thread\n");
       close(pcfd->fd);
       free(pcfd);
@@ -1116,4 +1143,3 @@ void* httpd::server_thread( void *arg ) {
 
   return NULL;
 }
-

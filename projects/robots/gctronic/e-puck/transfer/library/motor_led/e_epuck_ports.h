@@ -1,14 +1,14 @@
 /**************************************************************************
-* 			Defintition of all port of the e-puck 	 	                  *
-*			Version 1.0 november 2005			                          *
-*			Michael Bonani, Francesco Mondada, Davis Dadie                *
-*									                                      *
-**************************************************************************/
+ * 			Defintition of all port of the e-puck 	 	                  *
+ *			Version 1.0 november 2005			                          *
+ *			Michael Bonani, Francesco Mondada, Davis Dadie                *
+ *									                                      *
+ **************************************************************************/
 /********************************************************************************
 
-			Defintition of all port of the e-puck
-			Version 1.0 november 2005
-			Michael Bonani, Francesco Mondada, Davis Dadie
+                        Defintition of all port of the e-puck
+                        Version 1.0 november 2005
+                        Michael Bonani, Francesco Mondada, Davis Dadie
 
 
 This file is part of the e-puck library license.
@@ -147,21 +147,19 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
 
 /*********************GENERAL SETUP************************/
 
-#define FOSC   7.3728e6     // 7.3728Mhz crystal in XTL mode
-#define PLL    8.0       	// 8x PLL
+#define FOSC 7.3728e6  // 7.3728Mhz crystal in XTL mode
+#define PLL 8.0        // 8x PLL
 
+#define FCY ((FOSC * PLL) / (4.0))  // Instruction cycle frequency
+#define MILLISEC (FCY / 1.0e3)      // 1mSec delay constant
+#define MICROSEC (FCY / 1.0e6)      // 1uSec delay constant
+#define NANOSEC (FCY / 1.0e9)       // 1nSec delay constant
 
-#define FCY     ((FOSC*PLL)/(4.0))	// Instruction cycle frequency
-#define MILLISEC  (FCY/1.0e3)		// 1mSec delay constant
-#define MICROSEC  (FCY/1.0e6)		// 1uSec delay constant
-#define NANOSEC   (FCY/1.0e9)		// 1nSec delay constant
+#define TCY_PIC (1e9 / FCY)             // time instruction cycle in [ns]
+#define INTERRUPT_DELAY (10 * TCY_PIC)  // delay to start an interrupt in [ns] (observe with p30f6014)
 
-#define	TCY_PIC		(1e9/FCY)		//time instruction cycle in [ns]
-#define	INTERRUPT_DELAY	(10*TCY_PIC)//delay to start an interrupt in [ns] (observe with p30f6014)
-
-#define TRUE	1
-#define FALSE	0
-
+#define TRUE 1
+#define FALSE 0
 
 /********************** OUTPUTS ***************************/
 #define OUTPUT_PIN 0
@@ -192,10 +190,10 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
 #define BODY_LED_DIR _TRISC2
 
 /*IR*/
-#define PULSE_IR0 _LATF7		// pulse IR 0 and 4
-#define PULSE_IR1 _LATF8		// pulse IR 1 and 5
-#define PULSE_IR2 _LATG0		// pulse IR 2 and 6
-#define PULSE_IR3 _LATG1		// pulse IR 3 and 7
+#define PULSE_IR0 _LATF7  // pulse IR 0 and 4
+#define PULSE_IR1 _LATF8  // pulse IR 1 and 5
+#define PULSE_IR2 _LATG0  // pulse IR 2 and 6
+#define PULSE_IR3 _LATG1  // pulse IR 3 and 7
 
 #define PULSE_IR0_DIR _TRISF7
 #define PULSE_IR1_DIR _TRISF8
@@ -203,8 +201,8 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
 #define PULSE_IR3_DIR _TRISG1
 
 /*First in front right of robot than turning clokwise*/
-#define IR0 8  // ir proximity sensor 0 on AD channel 8
-#define IR1 9  // ir proximity sensor 1 on AD channel 9
+#define IR0 8   // ir proximity sensor 0 on AD channel 8
+#define IR1 9   // ir proximity sensor 1 on AD channel 9
 #define IR2 10  // ir proximity sensor 2 on AD channel 10
 #define IR3 11  // ir proximity sensor 3 on AD channel 11
 #define IR4 12  // ir proximity sensor 4 on AD channel 12
@@ -212,17 +210,14 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
 #define IR6 14  // ir proximity sensor 6 on AD channel 14
 #define IR7 15  // ir proximity sensor 7 on AD channel 15
 
-
 /*analog*/
 #define MIC1 2  // microphone 1 on AD channel 2
 #define MIC2 3  // microphone 2 on AD channel 3
 #define MIC3 4  // microphone 3 on AD channel 4
 
-
 #define ACCX 5  // X Axis of accelerometer on AD channel 5
 #define ACCY 6  // Y Axis of accelerometer on AD channel 6
 #define ACCZ 7  // Z Axis of accelerometer on AD channel 7
-
 
 /*basic audio*/
 #define AUDIO_ON _LATF0
@@ -252,11 +247,11 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
 #define CAM_RESET_DIR _TRISC13
 
 /* I2C */
-#define SIO_D	_LATG3
-#define SIO_D_DIR	_TRISG3
+#define SIO_D _LATG3
+#define SIO_D_DIR _TRISG3
 
-#define SIO_C	_LATG2
-#define SIO_C_DIR	_TRISG2
+#define SIO_C _LATG2
+#define SIO_C_DIR _TRISG2
 
 /********************** INPUTS **************************/
 #define INPUT_PIN 1
@@ -314,14 +309,34 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
 #define CAM_PCLK_DIR _TRISC14
 
 /*********************** ASEMBLER SMALL FUNCTCION********************** */
-#define NOP() {__asm__ volatile ("nop");}
-#define CLRWDT() {__asm__ volatile ("clrwdt");}
-#define SLEEP() {__asm__ volatile ("pwrsav #0");}
-#define IDLE() {__asm__ volatile ("pwrsav #1");}
-#define INTERRUPT_OFF() {__asm__ volatile ("disi	#10000");}	//disable interrupts with priority 0-6 for 10000 cycles
-#define INTERRUPT_ON() {__asm__ volatile ("disi	#2");}
-#define RESET() {__asm__ volatile ("reset");}
-
+#define NOP()                \
+  {                          \
+    __asm__ volatile("nop"); \
+  }
+#define CLRWDT()                \
+  {                             \
+    __asm__ volatile("clrwdt"); \
+  }
+#define SLEEP()                    \
+  {                                \
+    __asm__ volatile("pwrsav #0"); \
+  }
+#define IDLE()                     \
+  {                                \
+    __asm__ volatile("pwrsav #1"); \
+  }
+#define INTERRUPT_OFF()                   \
+  {                                       \
+    __asm__ volatile("disi	#10000"); \
+  }  // disable interrupts with priority 0-6 for 10000 cycles
+#define INTERRUPT_ON()                \
+  {                                   \
+    __asm__ volatile("disi	#2"); \
+  }
+#define RESET()                \
+  {                            \
+    __asm__ volatile("reset"); \
+  }
 
 #define STOP_TMR1 IEC0bits.T1IE = 0
 #define STOP_TMR2 IEC0bits.T2IE = 0

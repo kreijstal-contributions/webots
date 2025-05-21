@@ -21,8 +21,8 @@ class WbQjsEnv : public QObject {
   Q_OBJECT
 
 public:
-  Q_INVOKABLE WbQjsEnv(){};
-  ~WbQjsEnv(){};
+  Q_INVOKABLE WbQjsEnv() {};
+  ~WbQjsEnv() {};
 
   Q_INVOKABLE QString getFromEnv(const QString &name) const;
 };

@@ -85,7 +85,8 @@ void Wrapper::stop() {
   }
 #else
 #define log(...) \
-  {}
+  {              \
+  }
 #endif
 
 #ifdef SAVE_CAMERA_IMAGES

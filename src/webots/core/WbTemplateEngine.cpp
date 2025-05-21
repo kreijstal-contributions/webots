@@ -41,7 +41,7 @@ namespace {
   //       VRML comments to comment templates
   QString gOpeningToken("%<");  // default: "#{"
   QString gClosingToken(">%");  // default: "}#"
-};                              // namespace
+};  // namespace
 
 void WbTemplateEngine::initializeJavaScript() {
   // copy JavaScript modules to the temporary directory

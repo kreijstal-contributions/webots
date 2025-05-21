@@ -90,8 +90,7 @@ namespace highwayhash {
 // Required due to macro expansion rules.
 #define HH_EXPAND_CONCAT(first, second) HH_CONCAT(first, second)
 // Appends HH_TARGET_NAME to "identifier_prefix".
-#define HH_ADD_TARGET_SUFFIX(identifier_prefix) \
-  HH_EXPAND_CONCAT(identifier_prefix, HH_TARGET_NAME)
+#define HH_ADD_TARGET_SUFFIX(identifier_prefix) HH_EXPAND_CONCAT(identifier_prefix, HH_TARGET_NAME)
 
 // HH_TARGET expands to an integer constant. Typical usage: HHStateT<HH_TARGET>.
 // This ensures your code will work correctly when compiler flags are changed,
@@ -110,41 +109,39 @@ namespace highwayhash {
 #define HH_TARGET_SSE41 2
 #define HH_TARGET_AVX2 4
 
-// Bit array for one or more HH_TARGET_*. Used to indicate which target(s) are
-// supported or were called by InstructionSets::RunAll.
-using TargetBits = unsigned;
+  // Bit array for one or more HH_TARGET_*. Used to indicate which target(s) are
+  // supported or were called by InstructionSets::RunAll.
+  using TargetBits = unsigned;
 
-namespace HH_TARGET_NAME {
+  namespace HH_TARGET_NAME {
 
-// Calls func(bit_value) for every nonzero bit in "bits".
-template <class Func>
-void ForeachTarget(TargetBits bits, const Func& func) {
-  while (bits != 0) {
-    const TargetBits lowest = bits & (~bits + 1);
-    func(lowest);
-    bits &= ~lowest;
-  }
-}
+    // Calls func(bit_value) for every nonzero bit in "bits".
+    template<class Func> void ForeachTarget(TargetBits bits, const Func &func) {
+      while (bits != 0) {
+        const TargetBits lowest = bits & (~bits + 1);
+        func(lowest);
+        bits &= ~lowest;
+      }
+    }
 
-}  // namespace HH_TARGET_NAME
+  }  // namespace HH_TARGET_NAME
 
-// Returns a brief human-readable string literal identifying one of the above
-// bits, or nullptr if zero, multiple, or unknown bits are set.
-const char* TargetName(const TargetBits target_bit);
+  // Returns a brief human-readable string literal identifying one of the above
+  // bits, or nullptr if zero, multiple, or unknown bits are set.
+  const char *TargetName(const TargetBits target_bit);
 
 #if HH_ARCH_X64
 
-// Calls CPUID instruction with eax=level and ecx=count and returns the result
-// in abcd array where abcd = {eax, ebx, ecx, edx} (hence the name abcd).
-void Cpuid(const uint32_t level, const uint32_t count,
-           uint32_t* HH_RESTRICT abcd);
+  // Calls CPUID instruction with eax=level and ecx=count and returns the result
+  // in abcd array where abcd = {eax, ebx, ecx, edx} (hence the name abcd).
+  void Cpuid(const uint32_t level, const uint32_t count, uint32_t *HH_RESTRICT abcd);
 
-// Returns the APIC ID of the CPU on which we're currently running.
-uint32_t ApicId();
+  // Returns the APIC ID of the CPU on which we're currently running.
+  uint32_t ApicId();
 
-// Returns nominal CPU clock frequency for converting tsc_timer cycles to
-// seconds. This is unaffected by CPU throttling ("invariant"). Thread-safe.
-double InvariantCyclesPerSecond();
+  // Returns nominal CPU clock frequency for converting tsc_timer cycles to
+  // seconds. This is unaffected by CPU throttling ("invariant"). Thread-safe.
+  double InvariantCyclesPerSecond();
 
 #endif  // HH_ARCH_X64
 

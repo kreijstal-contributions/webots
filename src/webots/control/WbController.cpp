@@ -901,8 +901,7 @@ void WbController::startMatlab() {
     mCommand = mMatlabCommand;
 
   mArguments = WbLanguageTools::matlabArguments();
-  mArguments << "-sd" << WbStandardPaths::controllerLibPath() + "matlab"
-             << "-batch"
+  mArguments << "-sd" << WbStandardPaths::controllerLibPath() + "matlab" << "-batch"
              << "launcher";
 }
 

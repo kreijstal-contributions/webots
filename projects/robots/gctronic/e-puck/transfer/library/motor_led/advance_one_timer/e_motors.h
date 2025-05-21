@@ -1,8 +1,8 @@
 /********************************************************************************
 
-			Advance control motor of e-puck
-			December 2004: first version
-			Lucas Meier & Francesco Mondada
+                        Advance control motor of e-puck
+                        December 2004: first version
+                        Lucas Meier & Francesco Mondada
 
 
 This file is part of the e-puck library license.
@@ -48,14 +48,14 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
 #define _MOTORS
 
 /* internal functions */
-//void run_left_motor(void);
-//void run_right_motor(void);
+// void run_left_motor(void);
+// void run_right_motor(void);
 
 /* user called function */
-void e_init_motors(void); 				// init to be done before using the other calls
+void e_init_motors(void);  // init to be done before using the other calls
 
-void e_set_speed_left(int motor_speed);  // motor speed: from -1000 to 1000
-void e_set_speed_right(int motor_speed); // motor speed: from -1000 to 1000
+void e_set_speed_left(int motor_speed);   // motor speed: from -1000 to 1000
+void e_set_speed_right(int motor_speed);  // motor speed: from -1000 to 1000
 void e_set_speed(int linear_speed, int angular_speed);
 
 void e_set_steps_left(int steps_left);

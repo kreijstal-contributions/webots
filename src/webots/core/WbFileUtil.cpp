@@ -217,8 +217,7 @@ void WbFileUtil::revealInFileManager(const QString &file) {
        << "-e"
        << "activate"
        << "-e"
-       << "select POSIX file \"" + file + "\""
-       << "-e"
+       << "select POSIX file \"" + file + "\"" << "-e"
        << "end tell";
   QProcess::startDetached("osascript", args);
 #else  // __linux__

@@ -21,27 +21,29 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "types.h"
 #include <float.h>
+#include "types.h"
 
-void           wb_camera_enable(WbDeviceTag,int sampling_period);
-void           wb_camera_disable(WbDeviceTag);
-#define        wb_camera_get_width(dt) 52
-#define        wb_camera_get_height(dt) 39
-#define        wb_camera_get_fov(dt) 0.7
-#define        wb_camera_get_type(dt) 'c'
-#define        wb_camera_get_near(dt) 0.0
-#define        wb_camera_get_far(dt) DBL_MAX
+void wb_camera_enable(WbDeviceTag, int sampling_period);
+void wb_camera_disable(WbDeviceTag);
+#define wb_camera_get_width(dt) 52
+#define wb_camera_get_height(dt) 39
+#define wb_camera_get_fov(dt) 0.7
+#define wb_camera_get_type(dt) 'c'
+#define wb_camera_get_near(dt) 0.0
+#define wb_camera_get_far(dt) DBL_MAX
 
 // The returned image is turned through 90° and encoded in RGB_565
 // For passing through this, use the camera_image_get_* functions below.
 const unsigned char *wb_camera_get_image(WbDeviceTag);
 
-unsigned char wb_camera_image_get_red(const unsigned char* image,int width,int x,int y);
-unsigned char wb_camera_image_get_green(const unsigned char* image,int width,int x,int y);
-unsigned char wb_camera_image_get_blue(const unsigned char* image,int width,int x,int y);
+unsigned char wb_camera_image_get_red(const unsigned char *image, int width, int x, int y);
+unsigned char wb_camera_image_get_green(const unsigned char *image, int width, int x, int y);
+unsigned char wb_camera_image_get_blue(const unsigned char *image, int width, int x, int y);
 
-#define wb_camera_image_get_gray(image,w,x,y) (wb_camera_image_get_red(image,w,x,y)/3 + wb_camera_image_get_green(image,w,x,y)/3 + wb_camera_image_get_blue(image,w,x,y)/3)
-#define wb_camera_image_get_grey(image,w,x,y) wb_camera_image_get_gray(image,w,x,y)
+#define wb_camera_image_get_gray(image, w, x, y)                                                 \
+  (wb_camera_image_get_red(image, w, x, y) / 3 + wb_camera_image_get_green(image, w, x, y) / 3 + \
+   wb_camera_image_get_blue(image, w, x, y) / 3)
+#define wb_camera_image_get_grey(image, w, x, y) wb_camera_image_get_gray(image, w, x, y)
 
 #endif /* CAMERA_H */

@@ -10,70 +10,67 @@
 
 #include <string.h>
 
-#include "minIni.h"
 #include "MotionModule.h"
 #include "Point.h"
+#include "minIni.h"
 
-#define HEAD_SECTION    "Head Pan/Tilt"
-#define INVALID_VALUE   -1024.0
+#define HEAD_SECTION "Head Pan/Tilt"
+#define INVALID_VALUE -1024.0
 
-namespace Robot
-{
-	class Head : public MotionModule
-	{
-	private:
-		static Head* m_UniqueInstance;
-		double m_LeftLimit;
-		double m_RightLimit;
-		double m_TopLimit;
-		double m_BottomLimit;
-		double m_Pan_Home;
-		double m_Tilt_Home;
-		double m_Pan_err;
-		double m_Pan_err_diff;
-		double m_Pan_p_gain;
-		double m_Pan_d_gain;
-		double m_Tilt_err;
-		double m_Tilt_err_diff;
-		double m_Tilt_p_gain;
-		double m_Tilt_d_gain;
-		double m_PanAngle;
-		double m_TiltAngle;
-		
-		Head();
-		void CheckLimit();
+namespace Robot {
+  class Head : public MotionModule {
+  private:
+    static Head *m_UniqueInstance;
+    double m_LeftLimit;
+    double m_RightLimit;
+    double m_TopLimit;
+    double m_BottomLimit;
+    double m_Pan_Home;
+    double m_Tilt_Home;
+    double m_Pan_err;
+    double m_Pan_err_diff;
+    double m_Pan_p_gain;
+    double m_Pan_d_gain;
+    double m_Tilt_err;
+    double m_Tilt_err_diff;
+    double m_Tilt_p_gain;
+    double m_Tilt_d_gain;
+    double m_PanAngle;
+    double m_TiltAngle;
 
-	public:
-		static Head* GetInstance() { return m_UniqueInstance; }
-		
-		~Head();
+    Head();
+    void CheckLimit();
 
-		void Initialize();
-		void Process();
+  public:
+    static Head *GetInstance() { return m_UniqueInstance; }
 
-		double GetTopLimitAngle()		{ return m_TopLimit; }
-		double GetBottomLimitAngle()	{ return m_BottomLimit; }
-		double GetRightLimitAngle()		{ return m_RightLimit; }
-		double GetLeftLimitAngle()		{ return m_LeftLimit; }
+    ~Head();
 
-		double GetPanAngle()		{ return m_PanAngle; }
-		double GetTiltAngle()		{ return m_TiltAngle; }
+    void Initialize();
+    void Process();
 
-		void MoveToHome();
-		void MoveByAngle(double pan, double tilt);
-		void MoveByAngleOffset(double pan, double tilt);
-		void InitTracking();
-		void MoveTracking(Point2D err); // For image processing
-		void MoveTracking();
+    double GetTopLimitAngle() { return m_TopLimit; }
+    double GetBottomLimitAngle() { return m_BottomLimit; }
+    double GetRightLimitAngle() { return m_RightLimit; }
+    double GetLeftLimitAngle() { return m_LeftLimit; }
 
+    double GetPanAngle() { return m_PanAngle; }
+    double GetTiltAngle() { return m_TiltAngle; }
 
-/*Read/write from a INI file*/
-		
-        void LoadINISettings(minIni* ini);
-        void LoadINISettings(minIni* ini, const std::string &section);
-        void SaveINISettings(minIni* ini);
-        void SaveINISettings(minIni* ini, const std::string &section);
-	};
-}
+    void MoveToHome();
+    void MoveByAngle(double pan, double tilt);
+    void MoveByAngleOffset(double pan, double tilt);
+    void InitTracking();
+    void MoveTracking(Point2D err);  // For image processing
+    void MoveTracking();
+
+    /*Read/write from a INI file*/
+
+    void LoadINISettings(minIni *ini);
+    void LoadINISettings(minIni *ini, const std::string &section);
+    void SaveINISettings(minIni *ini);
+    void SaveINISettings(minIni *ini, const std::string &section);
+  };
+}  // namespace Robot
 
 #endif

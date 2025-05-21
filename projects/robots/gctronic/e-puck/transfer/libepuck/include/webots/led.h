@@ -23,6 +23,6 @@
 
 #include "types.h"
 
-void wb_led_set(WbDeviceTag dt,int value);
+void wb_led_set(WbDeviceTag dt, int value);
 
 #endif /* LED_H */

@@ -1,8 +1,8 @@
 /********************************************************************************
 
-			Advance agenda events of e-puck
-			December 2004: first version
-			Lucas Meier & Francesco Mondada
+                        Advance agenda events of e-puck
+                        December 2004: first version
+                        Lucas Meier & Francesco Mondada
 
 
 This file is part of the e-puck library license.
@@ -35,9 +35,8 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
 #ifndef __AGENDA_H__
 #define __AGENDA_H__
 
-
-#define AG_ALREADY_CREATED	1
-#define AG_NOT_FOUND		2
+#define AG_ALREADY_CREATED 1
+#define AG_NOT_FOUND 2
 
 /**********************************************************************
  * ------------------------ Type definition ---------------------------
@@ -55,17 +54,15 @@ typedef struct AgendaType Agenda;
  * \n This struct is designed to be used as chained list so we need a pointer
  * to the next element.
  */
-struct AgendaType
-{
-  unsigned int  cycle;		/*!< length in 10e of ms of a cycle between two events */
-  int  counter;				/*!< count the number of interrupts */
-  char activate;			/*!< can be on=1 or off=0*/
-  void (*function) (void);	/*!< function called when counter > cycle,
-                             * \warning This function must have the following
-                             * prototype: "void func(void)" */
-  Agenda *next;				/*!< pointer on the next agenda*/
+struct AgendaType {
+  unsigned int cycle;     /*!< length in 10e of ms of a cycle between two events */
+  int counter;            /*!< count the number of interrupts */
+  char activate;          /*!< can be on=1 or off=0*/
+  void (*function)(void); /*!< function called when counter > cycle,
+                           * \warning This function must have the following
+                           * prototype: "void func(void)" */
+  Agenda *next;           /*!< pointer on the next agenda*/
 };
-
 
 /***********************************************************************
  * ------------------------ From agenda.c file --------------------------
@@ -83,6 +80,5 @@ int e_pause_agenda(void (*func)(void));
 int e_restart_agenda(void (*func)(void));
 
 #endif /* __AGENDA_H__ */
-
 
 /* End of File : agenda.h */

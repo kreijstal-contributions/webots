@@ -17,8 +17,8 @@
 #ifndef PRINTF_OVERRIDE_H
 #define PRINTF_OVERRIDE_H
 
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 /*
  * - stdout is redirected on the bluetooth device
@@ -27,6 +27,6 @@
  * For these reasons, the printf function is silently overriden and do nothing
  */
 #define printf printf_override
-int printf_override(const char *fmt,...);
+int printf_override(const char *fmt, ...);
 
 #endif /* PRINTF_OVERRIDE_H */

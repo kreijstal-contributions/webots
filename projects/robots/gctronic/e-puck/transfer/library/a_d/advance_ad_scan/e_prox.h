@@ -1,7 +1,7 @@
 /********************************************************************************
 
-			Accessing the proximity sensor data (advance)
-			Novembre 7 2005	Lucas Meier
+                        Accessing the proximity sensor data (advance)
+                        Novembre 7 2005	Lucas Meier
 
 
 This file is part of the e-puck library license.
@@ -58,8 +58,8 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
 #define _PROX
 
 void e_calibrate_ir();
-int e_get_prox(unsigned int sensor_number); // to get a prox value
+int e_get_prox(unsigned int sensor_number);  // to get a prox value
 int e_get_calibrated_prox(unsigned int sensor_number);
-int e_get_ambient_light(unsigned int sensor_number); // to get ambient light value
+int e_get_ambient_light(unsigned int sensor_number);  // to get ambient light value
 
 #endif

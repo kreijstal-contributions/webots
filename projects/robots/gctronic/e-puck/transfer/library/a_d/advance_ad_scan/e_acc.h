@@ -1,7 +1,7 @@
 /********************************************************************************
 
-			Accessing the accelerometer data (advance)
-			Novembre 7 2005 Borter Jean-Joel
+                        Accessing the accelerometer data (advance)
+                        Novembre 7 2005 Borter Jean-Joel
 
 
 This file is part of the e-puck library license.
@@ -64,55 +64,50 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
 #ifndef _ACC_DEFS
 #define _ACC_DEFS
 
-
-#define CST_RADIAN		(180.0/3.1415)	// used to convert radian in degrees
-#define ANGLE_ERROR		666.0			// value returned if an angle can't be defined
-#define FILTER_SIZE		5				// define the size of the averaging filter
+#define CST_RADIAN (180.0 / 3.1415)  // used to convert radian in degrees
+#define ANGLE_ERROR 666.0            // value returned if an angle can't be defined
+#define FILTER_SIZE 5                // define the size of the averaging filter
 
 // ID of the different captor in their respective array
 
-#define ACCX_BUFFER	0
-#define ACCY_BUFFER	1
-#define ACCZ_BUFFER	2
+#define ACCX_BUFFER 0
+#define ACCY_BUFFER 1
+#define ACCZ_BUFFER 2
 
-
-#define GRAVITY 768             // 1 g fot 10 bits accelerometer
-#define GRAVITY_LSM330 16384    // 1 g for 16 bits accelerometer
+#define GRAVITY 768           // 1 g fot 10 bits accelerometer
+#define GRAVITY_LSM330 16384  // 1 g for 16 bits accelerometer
 
 /*! \struct TypeAccSpheric
  * \brief struct to store the acceleration vector in spherical coord
  */
-typedef struct
-{
-	float acceleration;		/*!< lenght of the acceleration vector
-							 * = intensity of the acceleration */
-	float orientation;		/*!< orientation of the acceleration vector
-							 * in the horizontal plan, zero facing front
-							 * - 0° = inclination to the front
-							 * (front part lower than rear part)
-							 * - 90° = inclination to the left
-							 * (left part lower than right part)
-							 * - 180° = inclination to the rear
-							 * (rear part lower than front part)
-							 * - 270° = inclination to the right
-							 * (right part lower than left part) */
-	float inclination;		/*!< inclination angle with the horizontal plan
-							 * - 0° = e-puck horizontal
-							 * - 90° = e-puck vertical
-							 * - 180° = e-puck horizontal but up-side-down */
+typedef struct {
+  float acceleration; /*!< lenght of the acceleration vector
+                       * = intensity of the acceleration */
+  float orientation;  /*!< orientation of the acceleration vector
+                       * in the horizontal plan, zero facing front
+                       * - 0° = inclination to the front
+                       * (front part lower than rear part)
+                       * - 90° = inclination to the left
+                       * (left part lower than right part)
+                       * - 180° = inclination to the rear
+                       * (rear part lower than front part)
+                       * - 270° = inclination to the right
+                       * (right part lower than left part) */
+  float inclination;  /*!< inclination angle with the horizontal plan
+                       * - 0° = e-puck horizontal
+                       * - 90° = e-puck vertical
+                       * - 180° = e-puck horizontal but up-side-down */
 } TypeAccSpheric;
 
 /*! \struct TypeAccRaw
  * \brief struct to store the acceleration raw data
  * in carthesian coord
  */
-typedef struct
-{
-	int acc_x;	/*!< The acceleration on x axis */
-	int acc_y;	/*!< The acceleration on y axis */
-	int acc_z;	/*!< The acceleration on z axis */
+typedef struct {
+  int acc_x; /*!< The acceleration on x axis */
+  int acc_y; /*!< The acceleration on y axis */
+  int acc_z; /*!< The acceleration on z axis */
 } TypeAccRaw;
-
 
 /**********************************************************************
  * ---------------------- Functions from acc.c ------------------------

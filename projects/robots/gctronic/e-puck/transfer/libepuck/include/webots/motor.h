@@ -24,15 +24,16 @@
 #include "types.h"
 
 #ifndef M_PI
-  #define M_PI 3.14159
+#define M_PI 3.14159
 #endif
 
 #ifndef INFINITY
-  #define INFINITY 0
+#define INFINITY 0
 #endif
 
-void   wb_motor_set_velocity(WbDeviceTag dt, double velocity);
+void wb_motor_set_velocity(WbDeviceTag dt, double velocity);
 double wb_motor_get_velocity(WbDeviceTag dt);
-void   wb_motor_set_position() { }
+void wb_motor_set_position() {
+}
 
 #endif /* MOTOR_H */

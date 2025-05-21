@@ -22,11 +22,11 @@
 
 /* map required file I/O to the standard C library */
 #include <stdio.h>
-#define ini_openread(filename,file)   ((*(file) = fopen((filename),"rt")) != NULL)
-#define ini_openwrite(filename,file)  ((*(file) = fopen((filename),"wt")) != NULL)
-#define ini_close(file)               fclose(*(file))
-#define ini_read(buffer,size,file)    fgets((buffer),(size),*(file))
-#define ini_write(buffer,file)        fputs((buffer),*(file))
-#define ini_rename(source,dest)       rename((source),(dest))
-#define ini_remove(filename)          remove(filename)
-#define ini_rewind(file)              rewind(*(file))
+#define ini_openread(filename, file) ((*(file) = fopen((filename), "rt")) != NULL)
+#define ini_openwrite(filename, file) ((*(file) = fopen((filename), "wt")) != NULL)
+#define ini_close(file) fclose(*(file))
+#define ini_read(buffer, size, file) fgets((buffer), (size), *(file))
+#define ini_write(buffer, file) fputs((buffer), *(file))
+#define ini_rename(source, dest) rename((source), (dest))
+#define ini_remove(filename) remove(filename)
+#define ini_rewind(file) rewind(*(file))

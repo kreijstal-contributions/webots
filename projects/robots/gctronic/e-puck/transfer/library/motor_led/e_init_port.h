@@ -1,8 +1,8 @@
 /********************************************************************************
 
-			Initialization of port of e-puck
-			Version 1.0 november 2005
-			Michael Bonani, Francesco Mondada, Davis Dadie
+                        Initialization of port of e-puck
+                        Version 1.0 november 2005
+                        Michael Bonani, Francesco Mondada, Davis Dadie
 
 
 This file is part of the e-puck library license.
@@ -31,4 +31,3 @@ void e_init_port(void);
 unsigned char isEpuckVersion1_3(void);
 
 #endif
-

@@ -23,8 +23,8 @@
 
 #include "types.h"
 
-void   wb_distance_sensor_enable(WbDeviceTag,int sampling_period);
-void   wb_distance_sensor_disable(WbDeviceTag t);
+void wb_distance_sensor_enable(WbDeviceTag, int sampling_period);
+void wb_distance_sensor_disable(WbDeviceTag t);
 double wb_distance_sensor_get_value(WbDeviceTag t);
 
 #endif /* DISTANCE_SENSOR_H */

@@ -9,9 +9,9 @@
 
 #include "e_poxxxx.h"
 
-#define PO_6030_MODE_VGA 	0x20
-#define PO_6030_MODE_QVGA 	0x40
-#define PO_6030_MODE_QQVGA 	0x80
+#define PO_6030_MODE_VGA 0x20
+#define PO_6030_MODE_QVGA 0x40
+#define PO_6030_MODE_QQVGA 0x80
 
 #define BAYER_CLOCK_1 0x10
 #define BAYER_CLOCK_2 0x50
@@ -28,13 +28,10 @@
 #define PO_6030_SPEED_4 BAYER_CLOCK_4
 #define PO_6030_SPEED_8 BAYER_CLOCK_8
 
+int e_po6030k_config_cam(unsigned int sensor_x1, unsigned int sensor_y1, unsigned int sensor_width, unsigned int sensor_height,
+                         unsigned int zoom_fact_width, unsigned int zoom_fact_height, int color_mode);
 
-int e_po6030k_config_cam(unsigned int sensor_x1,unsigned int sensor_y1,
-			 unsigned int sensor_width,unsigned int sensor_height,
-			 unsigned int zoom_fact_width,unsigned int zoom_fact_height,
-			 int color_mode);
-
-int  e_po6030k_get_bytes_per_pixel(int color_mode);
+int e_po6030k_get_bytes_per_pixel(int color_mode);
 
 void e_po6030k_set_color_mode(unsigned char format);
 
@@ -46,13 +43,12 @@ void e_po6030k_set_bayer_clkdiv(unsigned char div);
 void e_po6030k_set_pclkdiv(unsigned char div);
 int e_po6030k_set_mode(unsigned char format, unsigned char sampl_mode);
 
-
 int e_po6030k_get_bytes_per_pixel(int color_mode);
-int e_po6030k_set_wx(unsigned int start,unsigned int stop);
+int e_po6030k_set_wx(unsigned int start, unsigned int stop);
 
 int e_po6030k_set_wy(unsigned int start, unsigned int stop);
 
-int e_po6030k_set_vsync(unsigned int start,unsigned int stop);
+int e_po6030k_set_vsync(unsigned int start, unsigned int stop);
 
 #define E_PO6030K_SKETCH_BW 0
 #define E_PO6030K_SKETCH_COLOR 1

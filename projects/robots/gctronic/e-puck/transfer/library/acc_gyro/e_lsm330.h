@@ -6,7 +6,6 @@
 #ifndef __LSM330_H__
 #define __LSM330_H__
 
-
 void initAccAndGyro(void);
 
 void getAllAxesAccRaw(unsigned char *arr);

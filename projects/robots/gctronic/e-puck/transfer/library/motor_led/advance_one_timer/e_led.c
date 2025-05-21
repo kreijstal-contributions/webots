@@ -1,10 +1,10 @@
 /********************************************************************************
 
-			Advance control led of e-puck
-			December 2004: first version
-			Lucas Meier & Francesco Mondada
-			August 2007: Led effects added
-			Jonathan Besuchet
+                        Advance control led of e-puck
+                        December 2004: first version
+                        Lucas Meier & Francesco Mondada
+                        August 2007: Led effects added
+                        Jonathan Besuchet
 
 
 This file is part of the e-puck library license.
@@ -64,77 +64,67 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
  * \warning if led_number is other than 0-7, all leds are set
  * to the indicated value.
  */
-void e_set_led(unsigned int led_number, unsigned int value)
-{
-	switch(led_number)
-	{
-		case 0:
-			{
-			if(value>1)
-				LED0 = LED0^1;
-			else
-				LED0 = value;
-			break;
-			}
-		case 1:
-			{
-			if(value>1)
-				LED1 = LED1^1;
-			else
-				LED1 = value;
-			break;
-			}
-		case 2:
-			{
-			if(value>1)
-				LED2 = LED2^1;
-			else
-				LED2 = value;
-			break;
-			}
-		case 3:
-			{
-			if(value>1)
-				LED3 = LED3^1;
-			else
-				LED3 = value;
-			break;
-			}
-		case 4:
-			{
-			if(value>1)
-				LED4 = LED4^1;
-			else
-				LED4 = value;
-			break;
-			}
-		case 5:
-			{
-			if(value>1)
-				LED5 = LED5^1;
-			else
-				LED5 = value;
-			break;
-			}
-		case 6:
-			{
-			if(value>1)
-				LED6 = LED6^1;
-			else
-				LED6 = value;
-			break;
-			}
-		case 7:
-			{
-			if(value>1)
-				LED7 = LED7^1;
-			else
-				LED7 = value;
-			break;
-			}
-		default:
-			LED0 = LED1 = LED2 = LED3 = LED4 = LED5 = LED6 = LED7 = value;
-	}
+void e_set_led(unsigned int led_number, unsigned int value) {
+  switch (led_number) {
+    case 0: {
+      if (value > 1)
+        LED0 = LED0 ^ 1;
+      else
+        LED0 = value;
+      break;
+    }
+    case 1: {
+      if (value > 1)
+        LED1 = LED1 ^ 1;
+      else
+        LED1 = value;
+      break;
+    }
+    case 2: {
+      if (value > 1)
+        LED2 = LED2 ^ 1;
+      else
+        LED2 = value;
+      break;
+    }
+    case 3: {
+      if (value > 1)
+        LED3 = LED3 ^ 1;
+      else
+        LED3 = value;
+      break;
+    }
+    case 4: {
+      if (value > 1)
+        LED4 = LED4 ^ 1;
+      else
+        LED4 = value;
+      break;
+    }
+    case 5: {
+      if (value > 1)
+        LED5 = LED5 ^ 1;
+      else
+        LED5 = value;
+      break;
+    }
+    case 6: {
+      if (value > 1)
+        LED6 = LED6 ^ 1;
+      else
+        LED6 = value;
+      break;
+    }
+    case 7: {
+      if (value > 1)
+        LED7 = LED7 ^ 1;
+      else
+        LED7 = value;
+      break;
+    }
+    default:
+      LED0 = LED1 = LED2 = LED3 = LED4 = LED5 = LED6 = LED7 = value;
+  }
 }
 
 /*! \brief turn off the 8 LEDs
@@ -142,16 +132,15 @@ void e_set_led(unsigned int led_number, unsigned int value)
  * The e-puck has 8 green LEDs. This function turn all off.
  * \warning this function doesn't turn off "body LED" and "front LED".
  */
-void e_led_clear(void)
-{
-	LED0 = 0;
-	LED1 = 0;
-	LED2 = 0;
-	LED3 = 0;
-	LED4 = 0;
-	LED5 = 0;
-	LED6 = 0;
-	LED7 = 0;
+void e_led_clear(void) {
+  LED0 = 0;
+  LED1 = 0;
+  LED2 = 0;
+  LED3 = 0;
+  LED4 = 0;
+  LED5 = 0;
+  LED6 = 0;
+  LED7 = 0;
 }
 
 /*! \brief turn on/off the body LED
@@ -160,12 +149,11 @@ void e_led_clear(void)
  * you can change the state of these LED.
  * \param value 0 (off), 1 (on) otherwise change the state
  */
-void e_set_body_led(unsigned int value)
-{
-	if(value>1)
-		BODY_LED = BODY_LED^1;
-	else
-		BODY_LED = value;
+void e_set_body_led(unsigned int value) {
+  if (value > 1)
+    BODY_LED = BODY_LED ^ 1;
+  else
+    BODY_LED = value;
 }
 
 /*! \brief turn on/off the front LED
@@ -174,12 +162,11 @@ void e_set_body_led(unsigned int value)
  * change the state of these LED.
  * \param value 0 (off), 1 (on) otherwise change the state
  */
-void e_set_front_led(unsigned int value)
-{
-	if(value>1)
-		FRONT_LED = FRONT_LED^1;
-	else
-	FRONT_LED = value;
+void e_set_front_led(unsigned int value) {
+  if (value > 1)
+    FRONT_LED = FRONT_LED ^ 1;
+  else
+    FRONT_LED = value;
 }
 
 /** \brief Change the state of all LED
@@ -187,16 +174,15 @@ void e_set_front_led(unsigned int value)
  * Callback function for an agenda.
  * \sa AgendaType
  */
-void e_blink_led(void)
-{
-	LED0 = ~LED0;
-	LED1 = ~LED1;
-	LED2 = ~LED2;
-	LED3 = ~LED3;
-	LED4 = ~LED4;
-	LED5 = ~LED5;
-	LED6 = ~LED6;
-	LED7 = ~LED7;
+void e_blink_led(void) {
+  LED0 = ~LED0;
+  LED1 = ~LED1;
+  LED2 = ~LED2;
+  LED3 = ~LED3;
+  LED4 = ~LED4;
+  LED5 = ~LED5;
+  LED6 = ~LED6;
+  LED7 = ~LED7;
 }
 
 /*! \brief Change the state of LED0
@@ -204,9 +190,8 @@ void e_blink_led(void)
  * Callback function for an agenda.
  * \sa AgendaType
  */
-void e_blink_led0(void)
-{
-	LED0 = ~LED0;
+void e_blink_led0(void) {
+  LED0 = ~LED0;
 }
 
 /*! \brief Change the state of LED1
@@ -214,9 +199,8 @@ void e_blink_led0(void)
  * Callback function for an agenda.
  * \sa AgendaType
  */
-void e_blink_led1(void)
-{
-	LED1 = ~LED1;
+void e_blink_led1(void) {
+  LED1 = ~LED1;
 }
 
 /*! \brief Change the state of LED2
@@ -224,9 +208,8 @@ void e_blink_led1(void)
  * Callback function for an agenda.
  * \sa AgendaType
  */
-void e_blink_led2(void)
-{
-	LED2 = ~LED2;
+void e_blink_led2(void) {
+  LED2 = ~LED2;
 }
 
 /*! \brief Change the state of LED3
@@ -234,9 +217,8 @@ void e_blink_led2(void)
  * Callback function for an agenda.
  * \sa AgendaType
  */
-void e_blink_led3(void)
-{
-	LED3 = ~LED3;
+void e_blink_led3(void) {
+  LED3 = ~LED3;
 }
 
 /*! \brief Change the state of LED4
@@ -244,9 +226,8 @@ void e_blink_led3(void)
  * Callback function for an agenda.
  * \sa AgendaType
  */
-void e_blink_led4(void)
-{
-	LED4 = ~LED4;
+void e_blink_led4(void) {
+  LED4 = ~LED4;
 }
 
 /*! \brief Change the state of LED5
@@ -254,9 +235,8 @@ void e_blink_led4(void)
  * Callback function for an agenda.
  * \sa AgendaType
  */
-void e_blink_led5(void)
-{
-	LED5 = ~LED5;
+void e_blink_led5(void) {
+  LED5 = ~LED5;
 }
 
 /*! \brief Change the state of LED6
@@ -264,9 +244,8 @@ void e_blink_led5(void)
  * Callback function for an agenda.
  * \sa AgendaType
  */
-void e_blink_led6(void)
-{
-	LED6 = ~LED6;
+void e_blink_led6(void) {
+  LED6 = ~LED6;
 }
 
 /*! \brief Change the state of LED7
@@ -274,9 +253,8 @@ void e_blink_led6(void)
  * Callback function for an agenda.
  * \sa AgendaType
  */
-void e_blink_led7(void)
-{
-	LED7 = ~LED7;
+void e_blink_led7(void) {
+  LED7 = ~LED7;
 }
 
 /*! \brief Start blinking all LED
@@ -284,8 +262,7 @@ void e_blink_led7(void)
  * \param cycle	   the number of cycle we wait before launching \ref e_blink_led(void)
  * \sa e_blink_led, e_activate_agenda
  */
-void e_start_led_blinking(int cycle)
-{
+void e_start_led_blinking(int cycle) {
   e_activate_agenda(e_blink_led, cycle);
 }
 
@@ -294,8 +271,7 @@ void e_start_led_blinking(int cycle)
  * This function use \ref e_destroy_agenda(void (*func)(void))
  * \sa e_destroy_agenda
  */
-void e_stop_led_blinking(void)
-{
+void e_stop_led_blinking(void) {
   e_destroy_agenda(e_blink_led);
 }
 
@@ -305,112 +281,135 @@ void e_stop_led_blinking(void)
  * \param cycle	   the number of cycle we wait before launching \ref e_blink_led(void)"
  * \sa e_blink_led, e_set_agenda_cycle
  */
-void e_set_blinking_cycle(int cycle)
-{
-	if (cycle>=0)
-		e_set_agenda_cycle(e_blink_led, cycle);
+void e_set_blinking_cycle(int cycle) {
+  if (cycle >= 0)
+    e_set_agenda_cycle(e_blink_led, cycle);
 }
 
-//###################################################
-// Artistics led effects
-//###################################################
+// ###################################################
+//  Artistics led effects
+// ###################################################
 
 #ifdef LED_EFFECTS
 
 /*! \brief One led is on and turn clockwise */
-void snake_led(void)
-{
-	static unsigned char no_led = 0;
-	if(no_led == 0)
-	{
-		e_set_led(7, 0);
-		e_set_led(no_led, 1);
-		no_led++;
-	}
-	else if(no_led == 7)
-	{
-		e_set_led(no_led-1, 0);
-		e_set_led(no_led, 1);
-		no_led = 0;
-	}
-	else
-	{
-		e_set_led(no_led-1,0);
-		e_set_led(no_led, 1);
-		no_led++;
-	}
+void snake_led(void) {
+  static unsigned char no_led = 0;
+  if (no_led == 0) {
+    e_set_led(7, 0);
+    e_set_led(no_led, 1);
+    no_led++;
+  } else if (no_led == 7) {
+    e_set_led(no_led - 1, 0);
+    e_set_led(no_led, 1);
+    no_led = 0;
+  } else {
+    e_set_led(no_led - 1, 0);
+    e_set_led(no_led, 1);
+    no_led++;
+  }
 }
 
 /*! \brief The leds go on from the front to the back
  and go off from the front to the back, etc */
-void flow_led(void)
-{
-	static unsigned char no_led = 0;
-	switch(no_led)
-	{
-		case 0: e_set_led(0, 2); break;
-		case 1: e_set_led(1, 2); e_set_led(7, 2); break;
-		case 2: e_set_led(2, 2); e_set_led(6, 2); break;
-		case 3: e_set_led(3, 2); e_set_led(5, 2); break;
-		case 4: e_set_led(4, 2); break;
-	}
-	if(no_led < 4)
-		no_led++;
-	else
-		no_led = 0;
+void flow_led(void) {
+  static unsigned char no_led = 0;
+  switch (no_led) {
+    case 0:
+      e_set_led(0, 2);
+      break;
+    case 1:
+      e_set_led(1, 2);
+      e_set_led(7, 2);
+      break;
+    case 2:
+      e_set_led(2, 2);
+      e_set_led(6, 2);
+      break;
+    case 3:
+      e_set_led(3, 2);
+      e_set_led(5, 2);
+      break;
+    case 4:
+      e_set_led(4, 2);
+      break;
+  }
+  if (no_led < 4)
+    no_led++;
+  else
+    no_led = 0;
 }
 
 /*! \brief The K2000 effect */
-void k2000_led(void)
-{
-	static unsigned char no_led = 0;
-	static unsigned char right = 1;
-	if(no_led == 0 && right) {
-		no_led = 1; e_set_led(0, 0); e_set_led(no_led, 1); right = 0;
-	}
-	else if(no_led == 0 && !right) {
-		no_led = 7; e_set_led(0, 0); e_set_led(no_led, 1); right = 1;
-	}
-	else if(no_led == 7) {
-		no_led = 0; e_set_led(7, 0); e_set_led(no_led, 1);
-	}
-	else if(no_led == 1) {
-		no_led = 0; e_set_led(1, 0); e_set_led(no_led, 1);
-	}
+void k2000_led(void) {
+  static unsigned char no_led = 0;
+  static unsigned char right = 1;
+  if (no_led == 0 && right) {
+    no_led = 1;
+    e_set_led(0, 0);
+    e_set_led(no_led, 1);
+    right = 0;
+  } else if (no_led == 0 && !right) {
+    no_led = 7;
+    e_set_led(0, 0);
+    e_set_led(no_led, 1);
+    right = 1;
+  } else if (no_led == 7) {
+    no_led = 0;
+    e_set_led(7, 0);
+    e_set_led(no_led, 1);
+  } else if (no_led == 1) {
+    no_led = 0;
+    e_set_led(1, 0);
+    e_set_led(no_led, 1);
+  }
 }
 
 /*! \brief The right LED are indicating the right side */
-void right_led(void)
-{
-	static unsigned char no_led = 0;
-	switch(no_led)
-	{
-		case 0: e_set_led(0, 2); e_set_led(4, 2); break;
-		case 1: e_set_led(1, 2); e_set_led(3, 2); break;
-		case 2: e_set_led(2, 2); break;
-		case 3: e_led_clear();
-	}
-	if(no_led < 3)
-		no_led++;
-	else
-		no_led = 0;
+void right_led(void) {
+  static unsigned char no_led = 0;
+  switch (no_led) {
+    case 0:
+      e_set_led(0, 2);
+      e_set_led(4, 2);
+      break;
+    case 1:
+      e_set_led(1, 2);
+      e_set_led(3, 2);
+      break;
+    case 2:
+      e_set_led(2, 2);
+      break;
+    case 3:
+      e_led_clear();
+  }
+  if (no_led < 3)
+    no_led++;
+  else
+    no_led = 0;
 }
 
 /*! \brief The left LED are indicating the left side */
-void left_led(void)
-{
-	static unsigned char no_led = 0;
-	switch(no_led)
-	{
-		case 0: e_set_led(0, 2); e_set_led(4, 2); break;
-		case 1: e_set_led(7, 2); e_set_led(5, 2); break;
-		case 2: e_set_led(6, 2); break;
-		case 3: e_led_clear();
-	}
-	if(no_led < 3)
-		no_led++;
-	else
-		no_led = 0;
+void left_led(void) {
+  static unsigned char no_led = 0;
+  switch (no_led) {
+    case 0:
+      e_set_led(0, 2);
+      e_set_led(4, 2);
+      break;
+    case 1:
+      e_set_led(7, 2);
+      e_set_led(5, 2);
+      break;
+    case 2:
+      e_set_led(6, 2);
+      break;
+    case 3:
+      e_led_clear();
+  }
+  if (no_led < 3)
+    no_led++;
+  else
+    no_led = 0;
 }
 #endif
-

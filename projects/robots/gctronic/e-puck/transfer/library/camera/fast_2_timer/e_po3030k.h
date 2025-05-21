@@ -122,41 +122,39 @@ int main(void) {
  * But you loose all advanced camera functions */
 #define PO3030K_FULL 1
 
-#define MODE_VGA 			0x44
-#define MODE_QVGA 			0x11
-#define MODE_QQVGA 			0x33
+#define MODE_VGA 0x44
+#define MODE_QVGA 0x11
+#define MODE_QQVGA 0x33
 
-#define SPEED_2				0x00
-#define SPEED_2_3			0x10
-#define SPEED_4				0x20
-#define SPEED_8				0x30
-#define SPEED_16			0x40
-#define SPEED_32			0x50
-#define SPEED_64			0x60
-#define SPEED_128			0x70
+#define SPEED_2 0x00
+#define SPEED_2_3 0x10
+#define SPEED_4 0x20
+#define SPEED_8 0x30
+#define SPEED_16 0x40
+#define SPEED_32 0x50
+#define SPEED_64 0x60
+#define SPEED_128 0x70
 
-int e_po3030k_config_cam(unsigned int sensor_x1,unsigned int sensor_y1,
-			 unsigned int sensor_width,unsigned int sensor_height,
-			 unsigned int zoom_fact_width,unsigned int zoom_fact_height,
-			 int color_mode);
+int e_po3030k_config_cam(unsigned int sensor_x1, unsigned int sensor_y1, unsigned int sensor_width, unsigned int sensor_height,
+                         unsigned int zoom_fact_width, unsigned int zoom_fact_height, int color_mode);
 
-int  e_po3030k_get_bytes_per_pixel(int color_mode);
+int e_po3030k_get_bytes_per_pixel(int color_mode);
 
 void e_po3030k_init_cam(void);
 
 void e_po3030k_write_cam_registers(void);
 
-int  e_po3030k_set_color_mode(int mode);
+int e_po3030k_set_color_mode(int mode);
 
-int  e_po3030k_set_sampling_mode(int mode);
+int e_po3030k_set_sampling_mode(int mode);
 
-int  e_po3030k_set_speed(int mode);
+int e_po3030k_set_speed(int mode);
 
-int  e_po3030k_set_wx(unsigned int start, unsigned int stop);
+int e_po3030k_set_wx(unsigned int start, unsigned int stop);
 
-int  e_po3030k_set_wy(unsigned int start, unsigned int stop);
+int e_po3030k_set_wy(unsigned int start, unsigned int stop);
 
-int  e_po3030k_set_vsync(unsigned int start,unsigned int stop,unsigned int col);
+int e_po3030k_set_vsync(unsigned int start, unsigned int stop, unsigned int col);
 
 void e_po3030k_set_mirror(int vertical, int horizontal);
 
@@ -164,9 +162,9 @@ void e_po3030k_set_mirror(int vertical, int horizontal);
 
 void e_po3030k_read_cam_registers(void);
 
-int  e_po3030k_set_register(unsigned char adr,unsigned char value);
+int e_po3030k_set_register(unsigned char adr, unsigned char value);
 
-int  e_po3030k_get_register(unsigned char adr,unsigned char * value);
+int e_po3030k_get_register(unsigned char adr, unsigned char *value);
 
 void e_po3030k_set_bias(unsigned char pixbias, unsigned char opbias);
 
@@ -184,9 +182,9 @@ void e_po3030k_set_gamma_coef(unsigned char array[12], char color);
 
 void e_po3030k_write_gamma_coef(void);
 
-int  e_po3030k_sync_register_array(unsigned char start, unsigned char stop);
+int e_po3030k_sync_register_array(unsigned char start, unsigned char stop);
 
-void e_po3030k_set_color_matrix(unsigned char array[3*3]);
+void e_po3030k_set_color_matrix(unsigned char array[3 * 3]);
 
 void e_po3030k_set_cb_cr_gain(unsigned char cg11c, unsigned char cg22c);
 
@@ -206,22 +204,21 @@ void e_po3030k_set_ref_exposure(unsigned char exp);
 
 void e_po3030k_set_max_min_exp(unsigned int min, unsigned int max);
 
-void e_po3030k_set_max_min_awb(unsigned char minb, unsigned char maxb, unsigned char minr,
-					unsigned char maxr, unsigned char ratior, unsigned char ratiob);
+void e_po3030k_set_max_min_awb(unsigned char minb, unsigned char maxb, unsigned char minr, unsigned char maxr,
+                               unsigned char ratior, unsigned char ratiob);
 
-int  e_po3030k_set_weight_win(unsigned int x1, unsigned int x2, unsigned int y1, unsigned int y2);
+int e_po3030k_set_weight_win(unsigned int x1, unsigned int x2, unsigned int y1, unsigned int y2);
 
 void e_po3030k_set_awb_ae(int awb, int ae);
 
-int  e_po3030k_set_color_gain(unsigned char global, unsigned char red,
-						unsigned char green1, unsigned char green2,
-						unsigned char blue);
+int e_po3030k_set_color_gain(unsigned char global, unsigned char red, unsigned char green1, unsigned char green2,
+                             unsigned char blue);
 
 void e_po3030k_set_flicker_mode(int manual);
 
 void e_po3030k_set_flicker_detection(int hz50, int hz60);
 
-int  e_po3030k_set_flicker_man_set(int hz50, int hz60, int fdm, int fk, int tol);
+int e_po3030k_set_flicker_man_set(int hz50, int hz60, int fdm, int fk, int tol);
 
 #endif
 

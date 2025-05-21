@@ -23,8 +23,8 @@
 
 #include "types.h"
 
-void          wb_accelerometer_enable(WbDeviceTag,int sampling_period);
-void          wb_accelerometer_disable(WbDeviceTag);
+void wb_accelerometer_enable(WbDeviceTag, int sampling_period);
+void wb_accelerometer_disable(WbDeviceTag);
 const double *wb_accelerometer_get_values(WbDeviceTag);
 
 #endif /* ACCELEROMETER_H */

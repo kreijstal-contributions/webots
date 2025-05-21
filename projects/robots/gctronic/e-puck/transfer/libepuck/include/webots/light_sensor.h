@@ -23,8 +23,8 @@
 
 #include "types.h"
 
-void   wb_light_sensor_enable(WbDeviceTag dt,int sampling_period);
-void   wb_light_sensor_disable(WbDeviceTag dt);
+void wb_light_sensor_enable(WbDeviceTag dt, int sampling_period);
+void wb_light_sensor_disable(WbDeviceTag dt);
 double wb_light_sensor_get_value(WbDeviceTag dt);
 
 #endif /* LIGHT_SENSOR_H */

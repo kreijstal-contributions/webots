@@ -1,7 +1,7 @@
 /********************************************************************************
 
-			Accessing the microphone data (advance)
-			Novembre 7 2005	Borter Jean-Joel
+                        Accessing the microphone data (advance)
+                        Novembre 7 2005	Borter Jean-Joel
 
 
 This file is part of the e-puck library license.
@@ -30,19 +30,18 @@ EPFL Ecole polytechnique federale de Lausanne http://www.epfl.ch
 #ifndef _MICRO
 #define _MICRO
 
-
 // ID of the different captor in their respective array
 
-#define MIC0_BUFFER	0
-#define MIC1_BUFFER	1
-#define MIC2_BUFFER	2
+#define MIC0_BUFFER 0
+#define MIC1_BUFFER 1
+#define MIC2_BUFFER 2
 
 /***********************************************************************
  * -------------------- Functions from micro.c -----------------------
  **********************************************************************/
 int e_get_micro(unsigned int micro_id);
 int e_get_micro_average(unsigned int micro_id, unsigned int filter_size);
-int e_get_micro_volume (unsigned int micro_id);
+int e_get_micro_volume(unsigned int micro_id);
 
 #endif /*_MICRO*/
 
