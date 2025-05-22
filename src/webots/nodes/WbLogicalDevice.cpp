@@ -19,8 +19,7 @@ void WbLogicalDevice::init() {
 }
 
 WbLogicalDevice::WbLogicalDevice(const QString &modelName, WbTokenizer *tokenizer) :
-  WbBaseNode(modelName, tokenizer),
-  WbDevice() {
+  WbBaseNode(modelName, tokenizer), WbDevice() {
   init();
 }
 

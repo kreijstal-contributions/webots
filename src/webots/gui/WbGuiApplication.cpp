@@ -66,11 +66,7 @@ using namespace std;
 // - http://lists-archives.org/kde-devel/20232-qt-4-5-related-crash-on-kdm-startup.html
 // - http://www.qtcentre.org/archive/index.php/t-28785.html
 WbGuiApplication::WbGuiApplication(int &argc, char **argv) :
-  QApplication(argc, argv),
-  mMainWindow(NULL),
-  mHeartbeat(0),
-  mTask(NORMAL),
-  mTcpServer(NULL) {
+  QApplication(argc, argv), mMainWindow(NULL), mHeartbeat(0), mTask(NORMAL), mTcpServer(NULL) {
   setApplicationName("Webots");
   setApplicationVersion(WbApplicationInfo::version().toString(true, false, true));
   setOrganizationName("Cyberbotics");

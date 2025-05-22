@@ -54,9 +54,7 @@ WbTriangleMeshGeometry::WbTriangleMeshGeometry(const QString &modelName, WbToken
 }
 
 WbTriangleMeshGeometry::WbTriangleMeshGeometry(const WbTriangleMeshGeometry &other) :
-  WbGeometry(other),
-  mTriangleMeshError(other.mTriangleMeshError),
-  mMeshKey(other.mMeshKey) {
+  WbGeometry(other), mTriangleMeshError(other.mTriangleMeshError), mMeshKey(other.mMeshKey) {
   init();
 }
 

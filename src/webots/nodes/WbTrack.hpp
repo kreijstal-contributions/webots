@@ -98,12 +98,7 @@ private:
   struct PathSegment {
     PathSegment(const WbVector2 &pointA, const WbVector2 &pointB, double angle, double r, const WbVector2 &c,
                 const WbVector2 &direction) :
-      startPoint(pointA),
-      endPoint(pointB),
-      initialRotation(angle),
-      radius(r),
-      center(c),
-      increment(direction) {}
+      startPoint(pointA), endPoint(pointB), initialRotation(angle), radius(r), center(c), increment(direction) {}
     PathSegment(const WbVector2 &pointA, const WbVector2 &pointB, double angle, const WbVector2 &normalizedDirection) :
       startPoint(pointA),
       endPoint(pointB),

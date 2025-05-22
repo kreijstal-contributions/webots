@@ -53,11 +53,7 @@ class LightRay {
 public:
   LightRay(WbLightSensor *sensor, const WbVector3 &lightDirection, double distance, const WbLight *light, double direct,
            double attenuation, dSpaceID spaceId) :
-    mLight(light),
-    mSensor(sensor),
-    mDirect(direct),
-    mAttenuation(attenuation),
-    mCollided(false) {
+    mLight(light), mSensor(sensor), mDirect(direct), mAttenuation(attenuation), mCollided(false) {
     assert(spaceId && sensor && mLight);
 
     // setup ray geom for ODE collision detection

@@ -37,8 +37,7 @@ public:
   explicit WbFieldValueRestriction(const WbRotation &r) : WbVariant(r), mAllowsSubtypes(false) {}
   explicit WbFieldValueRestriction(WbNode *n, bool allowsSubtypes) : WbVariant(n), mAllowsSubtypes(allowsSubtypes) {}
   explicit WbFieldValueRestriction(const WbVariant &variant, bool allowsSubtypes) :
-    WbVariant(variant),
-    mAllowsSubtypes(allowsSubtypes && variant.type() == WB_SF_NODE) {}
+    WbVariant(variant), mAllowsSubtypes(allowsSubtypes && variant.type() == WB_SF_NODE) {}
   WbFieldValueRestriction &operator=(const WbFieldValueRestriction &other);
   bool operator==(const WbFieldValueRestriction &other) const;
   bool operator!=(const WbFieldValueRestriction &other) const;

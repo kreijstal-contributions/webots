@@ -31,9 +31,7 @@ WbWheelEvent::WbWheelEvent() {
 // WbWheelLiftSolidEvent functions
 
 WbWheelLiftSolidEvent::WbWheelLiftSolidEvent(WbViewpoint *viewpoint, WbSolid *selectedSolid) :
-  mViewpoint(viewpoint),
-  mSelectedSolid(selectedSolid),
-  mInitialTranslation(selectedSolid->translation()) {
+  mViewpoint(viewpoint), mSelectedSolid(selectedSolid), mInitialTranslation(selectedSolid->translation()) {
   mScaleFactor = WbWorld::instance()->worldInfo()->lineScale();
   mUpWorldVector = WbWorld::instance()->worldInfo()->upVector();
   mViewpoint->lock();

@@ -39,11 +39,7 @@
 
 WbEditCommand::WbEditCommand(WbValue *fieldValue, const WbVariant &prevValue, const WbVariant &nextValue, int index,
                              QUndoCommand *parent) :
-  QUndoCommand(parent),
-  mFieldValue(fieldValue),
-  mPrevValue(prevValue),
-  mNextValue(nextValue),
-  mIndex(index) {
+  QUndoCommand(parent), mFieldValue(fieldValue), mPrevValue(prevValue), mNextValue(nextValue), mIndex(index) {
   assert(mFieldValue && (mFieldValue->isMultiple() ^ (mIndex < 0)));
   assert((WbValue::toSingle(mFieldValue->type()) == WB_SF_NODE) ||
          ((WbValue::toSingle(mFieldValue->type()) == prevValue.type()) && (prevValue.type() == nextValue.type())));

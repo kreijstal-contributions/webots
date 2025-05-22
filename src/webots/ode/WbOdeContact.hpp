@@ -22,8 +22,7 @@ class WbContactProperties;
 class WbOdeContact {
 public:
   WbOdeContact(const dContactGeom &geom, const WbContactProperties *contactProperties) :
-    mContactGeom(geom),
-    mContactProperties(contactProperties) {}
+    mContactGeom(geom), mContactProperties(contactProperties) {}
   WbOdeContact(const WbOdeContact &other) : mContactGeom(other.mContactGeom), mContactProperties(other.mContactProperties) {}
   WbOdeContact &operator=(const WbOdeContact &arg) {
     (dContactGeom) mContactGeom = arg.mContactGeom;

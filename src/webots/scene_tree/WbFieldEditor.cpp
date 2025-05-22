@@ -75,12 +75,7 @@ private:
 static QSize gMinimumSizeOffset = QSize(0, 0);
 
 WbFieldEditor::WbFieldEditor(QWidget *parent) :
-  QWidget(parent),
-  mNode(NULL),
-  mField(NULL),
-  mItem(-1),
-  mNodeItem(NULL),
-  mIsValidItemIndex(false) {
+  QWidget(parent), mNode(NULL), mField(NULL), mItem(-1), mNodeItem(NULL), mIsValidItemIndex(false) {
   setObjectName("fieldEditorGroupBox");
 
   WbExtendedStringEditor *const stringEditor = new WbExtendedStringEditor(this);

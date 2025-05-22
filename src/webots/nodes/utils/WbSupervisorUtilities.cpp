@@ -104,9 +104,7 @@ struct WbUpdatedFieldInfo {
   QString fieldName;
   int fieldCount;
   WbUpdatedFieldInfo(int nodeId, const QString &fieldName, int fieldCount) :
-    nodeId(nodeId),
-    fieldName(fieldName),
-    fieldCount(fieldCount) {}
+    nodeId(nodeId), fieldName(fieldName), fieldCount(fieldCount) {}
 };
 
 class WbFieldSetRequest {
@@ -210,8 +208,7 @@ private:
 class WbColorFieldSetRequest : public WbFieldSetRequest {
 public:
   WbColorFieldSetRequest(WbField *f, int index, double red, double green, double blue) :
-    WbFieldSetRequest(f, index),
-    mValue(red, green, blue) {
+    WbFieldSetRequest(f, index), mValue(red, green, blue) {
     assert((f->type() == WB_SF_COLOR && dynamic_cast<WbSFColor *>(f->value()) && index == -1) ||
            (f->type() == WB_MF_COLOR && dynamic_cast<WbMFColor *>(f->value()) && index >= 0));
   }
@@ -229,8 +226,7 @@ private:
 class WbRotationFieldSetRequest : public WbFieldSetRequest {
 public:
   WbRotationFieldSetRequest(WbField *f, int index, double x, double y, double z, double a) :
-    WbFieldSetRequest(f, index),
-    mValue(x, y, z, a) {
+    WbFieldSetRequest(f, index), mValue(x, y, z, a) {
     assert((f->type() == WB_SF_ROTATION && dynamic_cast<WbSFRotation *>(f->value()) && index == -1) ||
            (f->type() == WB_MF_ROTATION && dynamic_cast<WbMFRotation *>(f->value()) && index >= 0));
     mValue.normalize();

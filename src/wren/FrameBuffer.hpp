@@ -38,10 +38,7 @@ namespace wren {
 
     struct DrawBuffer {
       DrawBuffer(bool isRenderBuffer, size_t storageIndex) :
-        mIsRenderBuffer(isRenderBuffer),
-        mIsEnabled(true),
-        mStorageIndex(storageIndex),
-        mGlNamePbo(0) {}
+        mIsRenderBuffer(isRenderBuffer), mIsEnabled(true), mStorageIndex(storageIndex), mGlNamePbo(0) {}
       bool mIsRenderBuffer;
       bool mIsEnabled;
       size_t mStorageIndex;

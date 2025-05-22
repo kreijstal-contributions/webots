@@ -39,8 +39,7 @@
 enum { IDENTITY_MATRIX = 10001, BOUNDING_OBJECT_BASED = 10002 };
 
 WbAddInertiaMatrixDialog::WbAddInertiaMatrixDialog(bool validBoudingObject, QWidget *parent) :
-  QDialog(parent),
-  mValidBoundingObject(validBoudingObject) {
+  QDialog(parent), mValidBoundingObject(validBoudingObject) {
   setWindowTitle(tr("Add inertia matrix"));
 
   mTree = new QTreeWidget(this);

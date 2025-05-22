@@ -22,8 +22,7 @@
 #include <QtGui/QTextDocument>
 
 AutomatonObjectRepresentation::AutomatonObjectRepresentation(AutomatonObject *object) :
-  QGraphicsTextItem(object->name()),
-  mAutomatonObject(object) {
+  QGraphicsTextItem(object->name()), mAutomatonObject(object) {
   setFlag(QGraphicsItem::ItemIsMovable);
   setFlag(QGraphicsItem::ItemIsSelectable);
 

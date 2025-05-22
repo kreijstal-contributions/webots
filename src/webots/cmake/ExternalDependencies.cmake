@@ -60,12 +60,19 @@ else()
     set_target_properties(pico::pico PROPERTIES
         IMPORTED_LOCATION "${PICOTTS_LIBRARY}"
         INTERFACE_INCLUDE_DIRECTORIES "${PICOTTS_INCLUDE_DIR}"
+        INSTALL_RPATH "$ORIGIN/../lib"
+        BUILD_WITH_INSTALL_RPATH TRUE
     )
 endif()
 
 # Create a custom target that depends on the external project
 add_custom_target(picotts ALL DEPENDS picotts_external)
 add_dependencies(pico::pico picotts)
+
+# Set RPATH for all targets
+set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
+set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # Install the pico library
 install(FILES ${PICOTTS_LIBRARY}

@@ -25,9 +25,7 @@
 #include "Tokenizer.hpp"
 
 Transition::Transition(const QPointF &position, State *startState, State *endState) :
-  AutomatonObject(position),
-  mStartState(startState),
-  mEndState(endState) {
+  AutomatonObject(position), mStartState(startState), mEndState(endState) {
   mSensorCondition = RobotObjectFactory::instance()->createRobotSensorCondition();
   setName(tr("Transition %1").arg(name()));
 }

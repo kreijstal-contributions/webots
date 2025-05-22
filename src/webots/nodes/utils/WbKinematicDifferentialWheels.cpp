@@ -21,9 +21,7 @@
 
 WbKinematicDifferentialWheels::WbKinematicDifferentialWheels(WbRobot *robot, double wheelsRadius, double axleLength,
                                                              WbHingeJoint *leftJoint, WbHingeJoint *rightJoint) :
-  mWheelsRadius(wheelsRadius),
-  mAxleLength(axleLength),
-  mRobot(robot) {
+  mWheelsRadius(wheelsRadius), mAxleLength(axleLength), mRobot(robot) {
   mWheelJoints[0] = leftJoint;
   mWheelJoints[1] = rightJoint;
   mKinematicDisplacementNumber = 0;

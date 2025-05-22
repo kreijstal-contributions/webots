@@ -23,11 +23,7 @@
 #include <wren/viewport.h>
 
 WbWrenRangeNoise::WbWrenRangeNoise() :
-  WbWrenAbstractPostProcessingEffect(),
-  mTime(0.0f),
-  mIntensity(0.0f),
-  mMinRange(0.0f),
-  mMaxRange(0.0f) {
+  WbWrenAbstractPostProcessingEffect(), mTime(0.0f), mIntensity(0.0f), mMinRange(0.0f), mMaxRange(0.0f) {
 }
 
 void WbWrenRangeNoise::setup(WrViewport *viewport) {

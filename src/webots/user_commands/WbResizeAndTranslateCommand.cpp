@@ -19,8 +19,7 @@
 
 WbResizeAndTranslateCommand::WbResizeAndTranslateCommand(WbGeometry *geometry, const WbVector3 &scale,
                                                          const WbVector3 &translation, QUndoCommand *parent) :
-  WbResizeCommand(geometry, scale, parent),
-  mTranslation(translation) {
+  WbResizeCommand(geometry, scale, parent), mTranslation(translation) {
   mIsTranslationSet = (mTranslation != WbVector3());
 }
 

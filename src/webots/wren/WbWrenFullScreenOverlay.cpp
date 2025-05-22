@@ -26,11 +26,7 @@
 #include <cassert>
 
 WbWrenFullScreenOverlay::WbWrenFullScreenOverlay(const QString &text, int fontSize, bool onTop) :
-  mIsVisible(false),
-  mTextureWidth(0),
-  mTextureHeight(0),
-  mViewport(NULL),
-  mTexture(NULL) {
+  mIsVisible(false), mTextureWidth(0), mTextureHeight(0), mViewport(NULL), mTexture(NULL) {
   mOverlay = wr_overlay_new();
   wr_overlay_set_visible(mOverlay, false);
   if (onTop)

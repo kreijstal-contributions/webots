@@ -264,11 +264,7 @@ namespace wren {
   }
 
   PostProcessingEffect::PostProcessingEffect() :
-    mResultProgram(NULL),
-    mInputFrameBuffer(NULL),
-    mResultFrameBuffer(NULL),
-    mMesh(StaticMesh::createQuad()),
-    mDrawingIndex(0) {
+    mResultProgram(NULL), mInputFrameBuffer(NULL), mResultFrameBuffer(NULL), mMesh(StaticMesh::createQuad()), mDrawingIndex(0) {
   }
 
   PostProcessingEffect::~PostProcessingEffect() {

@@ -34,8 +34,7 @@
 #define ROUND(x, precision) (roundf((x) / precision) * precision)
 
 WbAnimationCommand::WbAnimationCommand(const WbNode *n, const QStringList &fields, bool saveInitialValue) :
-  mNode(n),
-  mChangedFromStart(false) {
+  mNode(n), mChangedFromStart(false) {
   QString state;
   for (int i = 0; i < fields.size(); ++i) {
     WbField *f = mNode->findField(fields[i], true);

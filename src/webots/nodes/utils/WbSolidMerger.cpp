@@ -27,10 +27,7 @@
 #include <cassert>
 
 WbSolidMerger::WbSolidMerger(WbSolid *solid) :
-  mSolid(solid),
-  mSpace(NULL),
-  mCenterOfMass(0.0, 0.0, 0.0),
-  mBodyArtificiallyDisabled(false) {
+  mSolid(solid), mSpace(NULL), mCenterOfMass(0.0, 0.0, 0.0), mBodyArtificiallyDisabled(false) {
   assert(mSolid);
   mBody = dBodyCreate(WbOdeContext::instance()->world());
   mOdeMass = new dMass;  // stores inertia relative the merger's CoM and its solid frame

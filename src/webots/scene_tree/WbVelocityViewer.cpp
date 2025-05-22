@@ -23,10 +23,7 @@
 #include <QtWidgets/QVBoxLayout>
 
 WbVelocityViewer::WbVelocityViewer(QWidget *parent) :
-  QWidget(parent),
-  mSolid(NULL),
-  mIsSelected(false),
-  mRelativeToComboBox(new QComboBox(this)) {
+  QWidget(parent), mSolid(NULL), mIsSelected(false), mRelativeToComboBox(new QComboBox(this)) {
   QVBoxLayout *vBoxLayout = new QVBoxLayout(this);
 
   // Relative to combo box

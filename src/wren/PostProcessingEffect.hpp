@@ -37,10 +37,7 @@ namespace wren {
     public:
       struct Connection {
         Connection(Pass *from, size_t outputIndex, Pass *to, size_t inputIndex) :
-          mFrom(from),
-          mOutputIndex(outputIndex),
-          mTo(to),
-          mInputIndex(inputIndex) {}
+          mFrom(from), mOutputIndex(outputIndex), mTo(to), mInputIndex(inputIndex) {}
 
         Pass *mFrom;
         size_t mOutputIndex;

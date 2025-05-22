@@ -34,8 +34,7 @@
 #define DRAG_HORIZONTAL_MIN_COS 0.25
 
 WbDragPoseEvent::WbDragPoseEvent(WbViewpoint *viewpoint, WbAbstractPose *selectedPose) :
-  WbDragKinematicsEvent(viewpoint),
-  mSelectedPose(selectedPose) {
+  WbDragKinematicsEvent(viewpoint), mSelectedPose(selectedPose) {
   mViewDistanceUnscaling = viewpoint->viewDistanceUnscaling(selectedPose->position());
 }
 
@@ -121,8 +120,7 @@ void WbDragHorizontalEvent::apply(const QPoint &currentMousePosition) {
 
 // WbDragVerticalEvent functions
 WbDragVerticalEvent::WbDragVerticalEvent(const QPoint &initialPosition, WbViewpoint *viewpoint, WbAbstractPose *selectedPose) :
-  WbTranslateEvent(viewpoint, selectedPose),
-  mNormal(viewpoint->orientation()->value().direction()) {
+  WbTranslateEvent(viewpoint, selectedPose), mNormal(viewpoint->orientation()->value().direction()) {
   // this event needs to use the actual position of the plane as we care about its depth from the Viewpoint
   mDragPlane = WbAffinePlane(mNormal, mSelectedPose->position());
   mViewpoint->viewpointRay(initialPosition.x(), initialPosition.y(), mMouseRay);

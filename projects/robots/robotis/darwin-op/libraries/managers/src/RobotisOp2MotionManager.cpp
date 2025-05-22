@@ -70,8 +70,7 @@ static double clamp(double value, double min, double max) {
 #endif
 
 RobotisOp2MotionManager::RobotisOp2MotionManager(webots::Robot *robot, const std::string &customMotionFile) :
-  mRobot(robot),
-  mCorrectlyInitialized(true) {
+  mRobot(robot), mCorrectlyInitialized(true) {
   if (!mRobot) {
     cerr << "RobotisOp2MotionManager: The robot instance is required" << endl;
     mCorrectlyInitialized = false;

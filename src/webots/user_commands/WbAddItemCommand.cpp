@@ -29,9 +29,7 @@
 #include <cassert>
 
 WbAddItemCommand::WbAddItemCommand(WbField *const field, WbMultipleValue *fieldValue, int index, QUndoCommand *parent) :
-  QUndoCommand(parent),
-  mFieldValue(fieldValue),
-  mIndex(index) {
+  QUndoCommand(parent), mFieldValue(fieldValue), mIndex(index) {
   assert(mIndex >= 0 && mFieldValue);
   setText(QObject::tr("add item"));
   if (field->hasRestrictedValues())
@@ -39,10 +37,7 @@ WbAddItemCommand::WbAddItemCommand(WbField *const field, WbMultipleValue *fieldV
 }
 
 WbAddItemCommand::WbAddItemCommand(WbMultipleValue *fieldValue, const WbVariant &item, int index, QUndoCommand *parent) :
-  QUndoCommand(parent),
-  mFieldValue(fieldValue),
-  mItem(item),
-  mIndex(index) {
+  QUndoCommand(parent), mFieldValue(fieldValue), mItem(item), mIndex(index) {
   assert(mIndex >= 0 && mFieldValue);
   assert(mItem.isEmpty() || WbValue::toSingle(mFieldValue->type()) == mItem.type());
   setText(QObject::tr("add item"));

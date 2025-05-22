@@ -31,9 +31,7 @@
 #include <cassert>
 
 WbVideoRecorderDialog::WbVideoRecorderDialog(QWidget *parent, const QSize &currentResolution, double minAcceleration) :
-  QDialog(parent),
-  mAvailableResolutions(),
-  mResolutionList(this) {
+  QDialog(parent), mAvailableResolutions(), mResolutionList(this) {
   setWindowTitle(tr("Choose video parameters"));
 
   const QScreen *screen = QGuiApplication::screenAt(QCursor::pos());

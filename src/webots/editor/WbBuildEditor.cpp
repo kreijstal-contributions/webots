@@ -40,8 +40,7 @@ WbBuildEditor *WbBuildEditor::instance() {
 }
 
 WbBuildEditor::WbBuildEditor(QWidget *parent, const QString &toolBarAlign) :
-  WbTextEditor(parent, toolBarAlign),
-  mIsCleaning(false) {
+  WbTextEditor(parent, toolBarAlign), mIsCleaning(false) {
   gInstance = this;
   mProcess = NULL;
   createActions();

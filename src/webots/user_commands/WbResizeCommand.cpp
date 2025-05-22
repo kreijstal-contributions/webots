@@ -18,10 +18,7 @@
 #include <cassert>
 
 WbResizeCommand::WbResizeCommand(WbGeometry *geometry, const WbVector3 &scale, QUndoCommand *parent) :
-  QUndoCommand(parent),
-  mGeometry(geometry),
-  mScale(scale),
-  mInvScale(1.0 / scale.x(), 1.0 / scale.y(), 1.0 / scale.z()) {
+  QUndoCommand(parent), mGeometry(geometry), mScale(scale), mInvScale(1.0 / scale.x(), 1.0 / scale.y(), 1.0 / scale.z()) {
   mIsFirstCall = true;
   setText(QObject::tr("rescale"));
 }

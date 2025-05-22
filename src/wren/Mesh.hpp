@@ -26,9 +26,7 @@ namespace wren {
   public:
     struct Triangle {
       Triangle(unsigned int vertex0, unsigned int vertex1, unsigned int vertex2, glm::vec3 normal) :
-        mVertexIndices{vertex0, vertex1, vertex2},
-        mNormal(normal),
-        mIsFacingLight(false) {}
+        mVertexIndices{vertex0, vertex1, vertex2}, mNormal(normal), mIsFacingLight(false) {}
 
       unsigned int mVertexIndices[3];
       glm::vec3 mNormal;
@@ -37,8 +35,7 @@ namespace wren {
 
     struct Edge {
       Edge(size_t triangle0, size_t triangle1, unsigned int vertex0, unsigned int vertex1) :
-        mTriangleIndices{triangle0, triangle1},
-        mVertexIndices{vertex0, vertex1} {}
+        mTriangleIndices{triangle0, triangle1}, mVertexIndices{vertex0, vertex1} {}
 
       size_t mTriangleIndices[2];
       unsigned int mVertexIndices[2];
@@ -114,7 +111,7 @@ namespace wren {
 
   protected:
     Mesh() {}
-    virtual ~Mesh() override{};
+    virtual ~Mesh() override {};
 
     std::vector<glm::vec3> mCoords;
     std::vector<glm::vec3> mNormals;

@@ -75,13 +75,7 @@ struct Pose {
 };
 
 Motion::Motion(const string &fileName) :
-  mValid(false),
-  mDuration(0),
-  mReverse(false),
-  mLoop(false),
-  mPlaying(false),
-  mElapsed(0),
-  mPreviousTime(0) {
+  mValid(false), mDuration(0), mReverse(false), mLoop(false), mPlaying(false), mElapsed(0), mPreviousTime(0) {
   cMotions.push_back(this);
 
   ifstream ifs;

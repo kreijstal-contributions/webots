@@ -19,9 +19,7 @@
 #include <cassert>
 
 WbResetCommand::WbResetCommand(WbField *field, QUndoCommand *parent) :
-  QUndoCommand(parent),
-  mField(field),
-  mPrevField(new WbField(*field, field->parentNode())) {
+  QUndoCommand(parent), mField(field), mPrevField(new WbField(*field, field->parentNode())) {
   assert(mField);
   setText(QObject::tr("reset"));
 }

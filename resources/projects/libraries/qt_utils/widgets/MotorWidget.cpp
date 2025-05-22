@@ -14,10 +14,7 @@
 using namespace webotsQtUtils;
 
 MotorWidget::MotorWidget(Device *device, QWidget *parent) :
-  ScalarSensorWidget(device, parent),
-  mRangeLevel(0),
-  mCommandRequest(false),
-  mTargetPosition(0.0) {
+  ScalarSensorWidget(device, parent), mRangeLevel(0), mCommandRequest(false), mTargetPosition(0.0) {
   mGraph2D->setUpdateRangeOnClick(false, false);
 
   mSlider = new QSlider(Qt::Vertical, mMainWidget);

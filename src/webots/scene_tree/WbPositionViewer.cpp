@@ -24,10 +24,7 @@
 #include <QtWidgets/QVBoxLayout>
 
 WbPositionViewer::WbPositionViewer(QWidget *parent) :
-  QWidget(parent),
-  mPose(NULL),
-  mIsSelected(false),
-  mRelativeToComboBox(new QComboBox(this)) {
+  QWidget(parent), mPose(NULL), mIsSelected(false), mRelativeToComboBox(new QComboBox(this)) {
   QVBoxLayout *vBoxLayout = new QVBoxLayout(this);
 
   // Relative to combo box

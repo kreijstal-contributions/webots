@@ -46,9 +46,7 @@ bool WbDragEvent::exceedsFloatMax(float x) {
 
 // WbDragView3DEvent constructor
 WbDragView3DEvent::WbDragView3DEvent(WbViewpoint *viewpoint) :
-  WbDragEvent(),
-  mViewpoint(viewpoint),
-  mViewDistanceUnscaling(1.0f) {
+  WbDragEvent(), mViewpoint(viewpoint), mViewDistanceUnscaling(1.0f) {
 }
 
 WbVector2 WbDragView3DEvent::clampLabelPosition(const float x, const float y, const WbWrenLabelOverlay *overlay) {

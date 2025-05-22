@@ -25,11 +25,7 @@
 #include <QtWidgets/QScrollBar>
 
 AutomatonWidget::AutomatonWidget(QWidget *parent) :
-  QGraphicsView(parent),
-  mLastMovePos(NULL),
-  mMode(SelectionMode),
-  mZoomFactor(0.0),
-  mWheelAttenuation(0.1) {
+  QGraphicsView(parent), mLastMovePos(NULL), mMode(SelectionMode), mZoomFactor(0.0), mWheelAttenuation(0.1) {
   mAutomatonScene = new AutomatonScene(this);
   setRenderHint(QPainter::Antialiasing);
   setScene(mAutomatonScene);

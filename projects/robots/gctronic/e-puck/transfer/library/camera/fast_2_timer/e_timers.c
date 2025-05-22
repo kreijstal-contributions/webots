@@ -43,7 +43,7 @@ static void init_timer5(void) {
     0x2;     // Asynchronous Counter Mode: external clock (timer increments on every rising edge of clock input) => VSYNC signal
   TMR5 = 0;  // timer5 counter reset
   PR5 = 1;   // timer5 period register (when TMRx and PRx matches, an interrupt occurs) => when one VSYNC is received then one
-            // interrupt is generated
+             // interrupt is generated
   IFS1bits.T5IF = 0;  // clear timer5 interrupt status flag (zero means no pending interrupt requests)
   IEC1bits.T5IE = 1;  // enable timer5 interrupt
   T5CONbits.TON = 1;  // start timer5

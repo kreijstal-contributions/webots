@@ -27,9 +27,7 @@ namespace webots {
     typedef enum { ROTATIONAL = 0, LINEAR } Type;
 
     explicit Brake(const std::string &name) :
-      Device(name),
-      motor(NULL),
-      positionSensor(NULL) {}  // Use Robot::getBrake() instead
+      Device(name), motor(NULL), positionSensor(NULL) {}  // Use Robot::getBrake() instead
     explicit Brake(WbDeviceTag tag) : Device(tag), motor(NULL), positionSensor(NULL) {}
     virtual ~Brake() {}
     Type getType() const;

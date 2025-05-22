@@ -22,9 +22,7 @@
 #include <wren/viewport.h>
 
 WbWrenAbstractPostProcessingEffect::WbWrenAbstractPostProcessingEffect() :
-  mWrenViewport(NULL),
-  mWrenPostProcessingEffect(NULL),
-  mHasBeenSetup(false) {
+  mWrenViewport(NULL), mWrenPostProcessingEffect(NULL), mHasBeenSetup(false) {
 }
 
 WbWrenAbstractPostProcessingEffect::~WbWrenAbstractPostProcessingEffect() {

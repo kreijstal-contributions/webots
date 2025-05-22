@@ -26,10 +26,7 @@ Motion *Motion::instance() {
 }
 
 Motion::Motion(const MotionPlayer *player, const QString &filepath) :
-  mNewPoseCounter(0),
-  mPlayer(player),
-  mIsValid(true),
-  mIsPoseSelectionBlocked(false) {
+  mNewPoseCounter(0), mPlayer(player), mIsValid(true), mIsPoseSelectionBlocked(false) {
   mFixedStep = wb_robot_get_basic_time_step();
   assert(!cInstance);
   setFilePath(filepath, true);

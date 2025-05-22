@@ -32,9 +32,7 @@ const WbVector3 WbWrenAbstractResizeManipulator::STANDARD_COORDINATE_VECTORS[3] 
 static const char *FILE_PATH_DOUBLE_ARROW = "gl:meshes/double_arrow.obj";
 
 WbWrenAbstractResizeManipulator::WbWrenAbstractResizeManipulator(ResizeConstraint constraint) :
-  WbWrenAbstractManipulator(3),
-  mConstraint(constraint),
-  mUniformMaterialIndex(X) {
+  WbWrenAbstractManipulator(3), mConstraint(constraint), mUniformMaterialIndex(X) {
   for (int i = 0; i < 3; ++i) {
     mHandleMaterials[i] = NULL;
     mAxisMaterials[i] = NULL;

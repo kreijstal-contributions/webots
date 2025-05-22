@@ -23,10 +23,7 @@
 WbSelection *WbSelection::cInstance = NULL;
 
 WbSelection::WbSelection() :
-  QObject(),
-  mSelectedAbstractPose(NULL),
-  mSelectedNode(NULL),
-  mResizeHandlesEnabledFromSceneTree(false) {
+  QObject(), mSelectedAbstractPose(NULL), mSelectedNode(NULL), mResizeHandlesEnabledFromSceneTree(false) {
   assert(cInstance == NULL);
   cInstance = this;
 }

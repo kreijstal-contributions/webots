@@ -34,8 +34,7 @@
 
 WbDragHorizontalSolidEvent::WbDragHorizontalSolidEvent(const QPoint &initialPosition, WbViewpoint *viewpoint,
                                                        WbSolid *selectedSolid) :
-  WbDragHorizontalEvent(initialPosition, viewpoint, selectedSolid),
-  mSelectedSolid(selectedSolid) {
+  WbDragHorizontalEvent(initialPosition, viewpoint, selectedSolid), mSelectedSolid(selectedSolid) {
   mSelectedSolid->pausePhysics();
 }
 
@@ -49,8 +48,7 @@ void WbDragHorizontalSolidEvent::apply(const QPoint &currentMousePosition) {
 
 WbDragVerticalSolidEvent::WbDragVerticalSolidEvent(const QPoint &initialPosition, WbViewpoint *viewpoint,
                                                    WbSolid *selectedSolid) :
-  WbDragVerticalEvent(initialPosition, viewpoint, selectedSolid),
-  mSelectedSolid(selectedSolid) {
+  WbDragVerticalEvent(initialPosition, viewpoint, selectedSolid), mSelectedSolid(selectedSolid) {
   mSelectedSolid->pausePhysics();
 }
 
@@ -81,8 +79,7 @@ void WbDragTranslateAlongAxisSolidEvent::apply(const QPoint &currentMousePositio
 WbDragRotateAroundWorldVerticalAxisSolidEvent::WbDragRotateAroundWorldVerticalAxisSolidEvent(const QPoint &initialPosition,
                                                                                              WbViewpoint *viewpoint,
                                                                                              WbSolid *selectedSolid) :
-  WbDragRotateAroundWorldVerticalAxisEvent(initialPosition, viewpoint, selectedSolid),
-  mSelectedSolid(selectedSolid) {
+  WbDragRotateAroundWorldVerticalAxisEvent(initialPosition, viewpoint, selectedSolid), mSelectedSolid(selectedSolid) {
   mSelectedSolid->pausePhysics();
 }
 
@@ -243,8 +240,7 @@ QString WbDragForceEvent::magnitudeString() const {
 // WbDragTorqueEvent functions
 
 WbDragTorqueEvent::WbDragTorqueEvent(const QSize &widgetSize, WbViewpoint *viewpoint, WbSolid *selectedSolid) :
-  WbDragPhysicsEvent(widgetSize, viewpoint, selectedSolid->solidMerger()->solid()),
-  mSolidMerger(selectedSolid->solidMerger()) {
+  WbDragPhysicsEvent(widgetSize, viewpoint, selectedSolid->solidMerger()->solid()), mSolidMerger(selectedSolid->solidMerger()) {
   mRepresentation = new WbTorqueRepresentation();
   mOrigin = mSelectedSolid->matrix() * mSolidMerger->centerOfMass();
   mEnd = mOrigin;

@@ -115,10 +115,7 @@ void WbRotateViewpointEvent::applyToViewpoint(const QPoint &delta, const WbVecto
 
 WbZoomAndRotateViewpointEvent::WbZoomAndRotateViewpointEvent(const QPoint &initialMousePosition, WbViewpoint *viewpoint,
                                                              double scale) :
-  WbDragViewpointEvent(viewpoint),
-  mPreviousMousePosition(initialMousePosition),
-  mDelta(),
-  mZscaleFactor(scale) {
+  WbDragViewpointEvent(viewpoint), mPreviousMousePosition(initialMousePosition), mDelta(), mZscaleFactor(scale) {
 }
 
 WbZoomAndRotateViewpointEvent::~WbZoomAndRotateViewpointEvent() {

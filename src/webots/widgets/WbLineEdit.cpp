@@ -23,8 +23,7 @@ WbLineEdit::WbLineEdit(QWidget *parent) : QLineEdit(parent), mClipboard(WbClipbo
 }
 
 WbLineEdit::WbLineEdit(const QString &contents, QWidget *parent) :
-  QLineEdit(contents, parent),
-  mClipboard(WbClipboard::instance()) {
+  QLineEdit(contents, parent), mClipboard(WbClipboard::instance()) {
   setMinimumHeight(sizeHint().height());
 }
 

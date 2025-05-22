@@ -23,10 +23,7 @@
 #include <QtGui/QBrush>
 
 EPuckLedButton::EPuckLedButton() :
-  QObject(),
-  QGraphicsEllipseItem(EPuckDrawingHelper::ledRect()),
-  mValue(EPuckFacade::NONE),
-  mIndex(-1) {
+  QObject(), QGraphicsEllipseItem(EPuckDrawingHelper::ledRect()), mValue(EPuckFacade::NONE), mIndex(-1) {
   updateColor();
 }
 

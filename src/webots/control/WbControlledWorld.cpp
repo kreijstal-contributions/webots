@@ -37,11 +37,7 @@ WbControlledWorld *WbControlledWorld::instance() {
 }
 
 WbControlledWorld::WbControlledWorld(WbTokenizer *tokenizer) :
-  WbSimulationWorld(tokenizer),
-  mFirstStep(true),
-  mRetryEnabled(false),
-  mIsExecutingStep(false),
-  mHasWaitingStep(false) {
+  WbSimulationWorld(tokenizer), mFirstStep(true), mRetryEnabled(false), mIsExecutingStep(false), mHasWaitingStep(false) {
   if (mWorldLoadingCanceled)
     return;
 

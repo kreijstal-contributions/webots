@@ -36,9 +36,7 @@ class WbVersion;
 class WbExternProto {
 public:
   WbExternProto(const QString &name, const QString &url, bool isImportable) :
-    mName(name),
-    mUrl(url),
-    mImportable(isImportable) {}
+    mName(name), mUrl(url), mImportable(isImportable) {}
 
   const QString &name() const { return mName; }
   void setUrl(const QString &url) { mUrl = url; }

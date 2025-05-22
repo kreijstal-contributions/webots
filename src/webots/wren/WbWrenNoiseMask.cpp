@@ -23,10 +23,7 @@
 #include <wren/viewport.h>
 
 WbWrenNoiseMask::WbWrenNoiseMask() :
-  WbWrenAbstractPostProcessingEffect(),
-  mTexture(NULL),
-  mTextureOffset{0.0f, 0.0f},
-  mTextureFactor{0.0f, 0.0f} {
+  WbWrenAbstractPostProcessingEffect(), mTexture(NULL), mTextureOffset{0.0f, 0.0f}, mTextureFactor{0.0f, 0.0f} {
 }
 
 void WbWrenNoiseMask::setup(WrViewport *viewport) {

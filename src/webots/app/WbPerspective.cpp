@@ -32,10 +32,7 @@
 #endif
 
 WbPerspective::WbPerspective(const QString &worldPath) :
-  mMaximizedDockId(-1),
-  mCentralWidgetVisible(true),
-  mSelectedTab(-1),
-  mOrthographicViewHeight(1.0) {
+  mMaximizedDockId(-1), mCentralWidgetVisible(true), mSelectedTab(-1), mOrthographicViewHeight(1.0) {
   const QFileInfo info(worldPath);
   mBaseName = info.absolutePath() + "/." + info.completeBaseName();
   mVersion = WbApplicationInfo::version();

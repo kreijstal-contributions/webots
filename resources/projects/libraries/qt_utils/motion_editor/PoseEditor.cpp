@@ -13,11 +13,7 @@
 using namespace webotsQtUtils;
 
 PoseEditor::PoseEditor(Pose *pose, Pose *previousPose, Pose *nextPose, bool fixedStep, QWidget *parent) :
-  QDialog(parent),
-  mPose(pose),
-  mPreviousPose(previousPose),
-  mNextPose(nextPose),
-  mFixedStep(fixedStep) {
+  QDialog(parent), mPose(pose), mPreviousPose(previousPose), mNextPose(nextPose), mFixedStep(fixedStep) {
   assert(mPose);
 
   // create GUI

@@ -18,12 +18,7 @@
 #include <QtCore/QRegularExpression>
 
 WbVersion::WbVersion(int major, int minor, int revision, bool webots) :
-  mMajor(major),
-  mMinor(minor),
-  mRevision(revision),
-  mCommit(""),
-  mDate(""),
-  mIsWebots(webots) {
+  mMajor(major), mMinor(minor), mRevision(revision), mCommit(""), mDate(""), mIsWebots(webots) {
 }
 
 WbVersion::WbVersion(const WbVersion &other) :

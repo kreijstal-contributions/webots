@@ -18,14 +18,12 @@
 #include "WbWrenTextureOverlay.hpp"
 
 WbDragOverlayEvent::WbDragOverlayEvent(const QPoint &initialMousePosition, WbRenderingDevice *renderingDevice) :
-  mInitialMousePosition(initialMousePosition),
-  mRenderingDevice(renderingDevice) {
+  mInitialMousePosition(initialMousePosition), mRenderingDevice(renderingDevice) {
 }
 
 WbDragTranslateOverlayEvent::WbDragTranslateOverlayEvent(const QPoint &initialMousePosition, const QPoint &windowSize,
                                                          WbRenderingDevice *renderingDevice) :
-  WbDragOverlayEvent(initialMousePosition, renderingDevice),
-  mWindowSize(windowSize) {
+  WbDragOverlayEvent(initialMousePosition, renderingDevice), mWindowSize(windowSize) {
   mHalfWidth = (double)mRenderingDevice->width() * mRenderingDevice->pixelSize() * 0.5f / (double)mWindowSize.x();
   mHalfHeight = (double)mRenderingDevice->height() * mRenderingDevice->pixelSize() * 0.5f / (double)mWindowSize.y();
 }

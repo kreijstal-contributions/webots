@@ -134,29 +134,15 @@ namespace wren {
     }
 
     Capsule::Capsule(const glm::vec3 &center, float radius, float height, bool hasSide, bool hasTop, bool hasBottom) :
-      mCenter(center),
-      mRadius(radius),
-      mHalfHeight(0.5f * height),
-      mHasSide(hasSide),
-      mHasTop(hasTop),
-      mHasBottom(hasBottom) {
+      mCenter(center), mRadius(radius), mHalfHeight(0.5f * height), mHasSide(hasSide), mHasTop(hasTop), mHasBottom(hasBottom) {
     }
 
     Cone::Cone(const glm::vec3 &center, float radius, float height, bool hasSide, bool hasBottom) :
-      mCenter(center),
-      mRadius(radius),
-      mHalfHeight(0.5f * height),
-      mHasSide(hasSide),
-      mHasBottom(hasBottom) {
+      mCenter(center), mRadius(radius), mHalfHeight(0.5f * height), mHasSide(hasSide), mHasBottom(hasBottom) {
     }
 
     Cylinder::Cylinder(const glm::vec3 &center, float radius, float height, bool hasSide, bool hasTop, bool hasBottom) :
-      mCenter(center),
-      mRadius(radius),
-      mHalfHeight(0.5f * height),
-      mHasSide(hasSide),
-      mHasTop(hasTop),
-      mHasBottom(hasBottom) {
+      mCenter(center), mRadius(radius), mHalfHeight(0.5f * height), mHasSide(hasSide), mHasTop(hasTop), mHasBottom(hasBottom) {
     }
 
     TriangleMesh::TriangleMesh(const glm::vec3 &position) : mPosition(position) {

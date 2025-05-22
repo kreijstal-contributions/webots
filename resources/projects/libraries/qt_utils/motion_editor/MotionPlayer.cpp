@@ -17,12 +17,7 @@ static double modulus(double a, double b) {
 }
 
 MotionPlayer::MotionPlayer() :
-  mMotion(NULL),
-  mStartingTime(0),
-  mPoseTimeOffset(0),
-  mMotionDuration(0),
-  mLoop(false),
-  mReverse(false) {
+  mMotion(NULL), mStartingTime(0), mPoseTimeOffset(0), mMotionDuration(0), mLoop(false), mReverse(false) {
 }
 
 MotionPlayer::~MotionPlayer() {

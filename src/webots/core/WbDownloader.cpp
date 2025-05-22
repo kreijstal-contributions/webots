@@ -20,11 +20,7 @@
 #include <QtNetwork/QNetworkRequest>
 
 WbDownloader::WbDownloader(const QUrl &url, const WbDownloader *existingDownload, QObject *parent) :
-  QObject(parent),
-  mUrl(url),
-  mNetworkReply(NULL),
-  mExistingDownload(existingDownload),
-  mFinished(false) {
+  QObject(parent), mUrl(url), mNetworkReply(NULL), mExistingDownload(existingDownload), mFinished(false) {
 }
 
 WbDownloader::~WbDownloader() {

@@ -30,9 +30,7 @@
 #include <QtWidgets/QGraphicsSceneMouseEvent>
 
 AutomatonScene::AutomatonScene(AutomatonWidget *automatonWidget) :
-  QGraphicsScene(),
-  mAutomatonWidget(automatonWidget),
-  mTransitionCreationLine(NULL) {
+  QGraphicsScene(), mAutomatonWidget(automatonWidget), mTransitionCreationLine(NULL) {
   mModel = Model::instance();
 
   connect(mModel->automaton(), SIGNAL(stateCreated(State *)), this, SLOT(stateCreated(State *)));

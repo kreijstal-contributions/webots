@@ -21,9 +21,7 @@
 
 namespace wren {
   SkeletonBone::SkeletonBone(Skeleton *skeleton, const char *name) :
-    mName(name),
-    mSkeleton(skeleton),
-    mFinalTransformDirty(true) {
+    mName(name), mSkeleton(skeleton), mFinalTransformDirty(true) {
     mSkeleton->addBone(this);
   }
 

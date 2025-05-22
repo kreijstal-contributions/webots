@@ -41,8 +41,7 @@ void WbLightRepresentation::updateScreenScale(int width, int height) {
 }
 
 WbLightRepresentation::WbLightRepresentation(WrTransform *parent, const WbVector3 &position) :
-  mPosition(position),
-  mQImage(NULL) {
+  mPosition(position), mQImage(NULL) {
   // Load sun texture (512x512 ARGB)
   QByteArray imagePath = QFileInfo("gl:textures/light_representation.png").absoluteFilePath().toUtf8();
   mTexture = wr_texture_2d_copy_from_cache(imagePath.constData());

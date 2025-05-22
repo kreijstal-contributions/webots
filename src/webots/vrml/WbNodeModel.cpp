@@ -35,10 +35,7 @@ void WbNodeModel::cleanup() {
 }
 
 WbNodeModel::WbNodeModel(WbTokenizer *tokenizer) :
-  mInfo(tokenizer->info()),
-  mName(tokenizer->nextWord()),
-  mParentName(tokenizer->parent()),
-  mParentModel(NULL) {
+  mInfo(tokenizer->info()), mName(tokenizer->nextWord()), mParentName(tokenizer->parent()), mParentModel(NULL) {
   tokenizer->skipToken("{");
 
   while (tokenizer->peekWord() != "}") {

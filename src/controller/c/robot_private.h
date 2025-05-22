@@ -25,7 +25,8 @@
 
 #ifdef NDEBUG
 #define ROBOT_ASSERT(condition) \
-  {}
+  {                             \
+  }
 #else
 #define ROBOT_ASSERT(condition)                                                     \
   {                                                                                 \

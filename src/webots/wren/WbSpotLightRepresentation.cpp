@@ -27,11 +27,7 @@
 
 WbSpotLightRepresentation::WbSpotLightRepresentation(WrTransform *parent, const WbVector3 &position, float radius,
                                                      float cutOffAngle, const WbVector3 &direction) :
-  WbLightRepresentation(parent, position),
-  mRadius(radius),
-  mCutOffAngle(cutOffAngle),
-  mDirection(direction),
-  mMesh(NULL) {
+  WbLightRepresentation(parent, position), mRadius(radius), mCutOffAngle(cutOffAngle), mDirection(direction), mMesh(NULL) {
   mMaterial = wr_phong_material_new();
   wr_material_set_default_program(mMaterial, WbWrenShaders::lineSetShader());
   const float color[3] = {1.0f, 1.0f, 0.0f};

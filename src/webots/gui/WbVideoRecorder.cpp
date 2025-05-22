@@ -54,11 +54,7 @@
 class FrameWriterThread : public QThread {
 public:
   FrameWriterThread(unsigned char *frame, const QString &fileName, const QSize &resolution, int pixelRatio, int quality) :
-    mFileName(fileName),
-    mResolution(resolution),
-    mPixelRatio(pixelRatio),
-    mQuality(quality),
-    mSuccess(false) {
+    mFileName(fileName), mResolution(resolution), mPixelRatio(pixelRatio), mQuality(quality), mSuccess(false) {
     const int w = mResolution.width() / mPixelRatio;
     const int h = mResolution.height() / mPixelRatio;
     mFrame = new unsigned char[4 * w * h];

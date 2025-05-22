@@ -59,9 +59,7 @@ void WbTemplateManager::cleanup() {
 }
 
 WbTemplateManager::WbTemplateManager() :
-  mBlockRegeneration(false),
-  mTemplatesNeedRegeneration(false),
-  mRegeneratingUpperTemplateNode(NULL) {
+  mBlockRegeneration(false), mTemplatesNeedRegeneration(false), mRegeneratingUpperTemplateNode(NULL) {
 }
 
 WbTemplateManager::~WbTemplateManager() {
