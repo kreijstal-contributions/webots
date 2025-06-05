@@ -12,7 +12,10 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 if(DEFINED ENV{WEBOTS_HOME})
     set(WEBOTS_HOME $ENV{WEBOTS_HOME})
 else()
-    message(FATAL_ERROR "WEBOTS_HOME environment variable is not defined")
+    # If WEBOTS_HOME is not set, try to determine it from the current source directory
+    # We are in resources/projects/controllers/generic, so webots root is 4 levels up
+    get_filename_component(WEBOTS_HOME "${CMAKE_CURRENT_SOURCE_DIR}/../../../.." ABSOLUTE)
+    message(STATUS "WEBOTS_HOME not set, using: ${WEBOTS_HOME}")
 endif()
 
 # Set Webots paths based on platform
@@ -65,7 +68,7 @@ add_executable(generic generic.c)
 
 # Set output name and directory
 set_target_properties(generic PROPERTIES
-    OUTPUT_NAME "generic${EXE_EXTENSION}"
+    OUTPUT_NAME "generic"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 

@@ -75,6 +75,7 @@ install(DIRECTORY projects/
 
 # Add subdirectories
 add_subdirectory(src)
+add_subdirectory(resources/projects/controllers)
 
 # Install main executable
 install(TARGETS webots

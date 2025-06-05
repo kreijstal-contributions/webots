@@ -29,7 +29,10 @@ endif()
 if(DEFINED ENV{WEBOTS_HOME})
     set(WEBOTS_HOME $ENV{WEBOTS_HOME})
 else()
-    message(FATAL_ERROR "WEBOTS_HOME environment variable is not defined")
+    # If WEBOTS_HOME is not set, try to determine it from the current source directory
+    # We are in resources/projects/controllers, so webots root is 3 levels up
+    get_filename_component(WEBOTS_HOME "${CMAKE_CURRENT_SOURCE_DIR}/../../.." ABSOLUTE)
+    message(STATUS "WEBOTS_HOME not set, using: ${WEBOTS_HOME}")
 endif()
 
 # Set Webots paths based on platform
@@ -100,7 +103,7 @@ function(add_webots_controller CONTROLLER_NAME)
     # Set target properties
     set_target_properties(${CONTROLLER_NAME} PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${CONTROLLER_NAME}"
-        OUTPUT_NAME "${CONTROLLER_NAME}${WEBOTS_EXE_EXTENSION}"
+        OUTPUT_NAME "${CONTROLLER_NAME}"
     )
     
     # Link against Webots Controller library
@@ -151,7 +154,7 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX "${WEBOTS_HOME}" CACHE PATH "Install path prefix" FORCE)
 endif()
 
-# Install controllers to appropriate location
+# Install controllers to appropriate location (back to source directory structure)
 foreach(CONTROLLER_DIR ${CONTROLLER_DIRS})
     string(REGEX REPLACE "/$" "" CONTROLLER_NAME "${CONTROLLER_DIR}")
     
@@ -159,8 +162,9 @@ foreach(CONTROLLER_DIR ${CONTROLLER_DIRS})
         file(GLOB CONTROLLER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${CONTROLLER_NAME}/*.c"
                                    "${CMAKE_CURRENT_SOURCE_DIR}/${CONTROLLER_NAME}/*.cpp")
         if(CONTROLLER_FILES)
+            # Install to the shared resources directory that gets installed
             install(TARGETS ${CONTROLLER_NAME}
-                    RUNTIME DESTINATION "resources/projects/controllers/${CONTROLLER_NAME}")
+                    RUNTIME DESTINATION "share/webots/resources/projects/controllers/${CONTROLLER_NAME}")
         endif()
     endif()
 endforeach()
